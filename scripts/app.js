@@ -202,8 +202,6 @@ function borderRemovalDecision(direction, currentIndex, newIndex) {
   }
 }
 
-
-
 function removeBorderTop(index) {
   gridArray[index].style.borderTop = "none";
 }
@@ -218,3 +216,43 @@ function removeBorderLeft(index) {
 }
 
 
+
+
+// Introduce "ball" into the game
+
+let currentPlayerIndex = 0;
+
+function addBall(index) {
+  gridArray[index].classList.add('ball');
+}
+
+function removeBall(index) {
+  gridArray[index].classList.remove('ball');
+}
+
+
+document.addEventListener('keyup', handleKeyPress)
+
+function handleKeyPress(event) {
+  removeBall(currentPlayerIndex);
+  console.log(event);
+  switch (event.which) {
+    case 39:
+      currentPlayerIndex = moveRight(currentPlayerIndex);
+      addBall(currentPlayerIndex);
+      break;
+    case 37:
+      currentPlayerIndex = moveLeft(currentPlayerIndex);
+      addBall(currentPlayerIndex);
+      break;
+    case 38:
+      currentPlayerIndex = moveUp(currentPlayerIndex);
+      addBall(currentPlayerIndex);
+      break;
+    case 40:
+      currentPlayerIndex = moveDown(currentPlayerIndex);
+      addBall(currentPlayerIndex);
+      break;
+    default: 
+  }
+}

@@ -38,5 +38,10 @@ body {
 }
 
 .fake-path {
-  background-color: orange;
+  background-color: blue;
+}
+
+
+.ball {
+  background-color: aqua;
 }
