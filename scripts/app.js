@@ -106,9 +106,6 @@ function checkPossibleExit(index) {
 
 
 
-
-
-
 let successfulPathArray = [0];
 let fakePathArray =[];
 let currentIndex = 0;
@@ -116,25 +113,7 @@ let randomNumber = null;
 let newIndex = null;
 let moveDirection = null;
 
-// gridArray[1].classList.add('successful-path');
-// gridArray[2].classList.add('successful-path');
-// gridArray[12].classList.add('successful-path');
-// gridArray[22].classList.add('successful-path');
-// gridArray[23].classList.add('successful-path');
-// gridArray[24].classList.add('successful-path');
-// gridArray[34].classList.add('successful-path');
-
-// gridArray[33].classList.add('successful-path');
-// gridArray[44].classList.add('successful-path');
-// gridArray[35].classList.add('successful-path');
-// gridArray[25].classList.add('successful-path');
-// gridArray[14].classList.add('successful-path');
-
-
-
-
-
-function createMaze() {
+function createSuccessfulPath() {
 
 // Checking if there is a possible exit
 while (checkPossibleExit(currentIndex) === false) {
@@ -144,8 +123,6 @@ while (checkPossibleExit(currentIndex) === false) {
   successfulPathArray.pop();
   currentIndex = successfulPathArray[successfulPathArray.length - 1];
 }
-
-
 
 
   // Once possible exit is known generate random direction
@@ -169,25 +146,25 @@ while (checkPossibleExit(currentIndex) === false) {
       break;
   }
 
-  console.log("Current Index: ", currentIndex);
-  console.log("New Index: ", newIndex, " Move Direction: ", moveDirection);
 
 
-  // Check to see if newIndex has successful-path class or fake-path class or is a wall
+  // Check to see if newIndex has successful-path class or fake-path class or is a wall, if true, re-run function, if not then add 
+  // successful-path class to newIndex, add newIndex number to successfulPath array, and update currentIndex
+  // to newIndex.
   if (checkIfWallPresent(moveDirection, currentIndex) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
     gridArray[newIndex].classList.add('successful-path');
     successfulPathArray.push(newIndex);
+    borderRemovalDecision(moveDirection, currentIndex, newIndex);
     currentIndex = newIndex;
   }
   else {
-    console.log("Ouch");
-    createMaze();
+    createSuccessfulPath();
   }
 }
 
-
+// Run createMaze function
 while (gridArray[currentIndex].classList.contains('finishing-square')===false) {
-  createMaze();
+  createSuccessfulPath();
 
 }
 
@@ -202,40 +179,42 @@ console.log("Fake path Array: ", fakePathArray);
 
 
 
+// 4) Deal with the boarder
+
+function borderRemovalDecision(direction, currentIndex, newIndex) {
+  switch (direction) {
+    case 'right':
+      removeBorderRight(currentIndex);
+      removeBorderLeft(newIndex);
+      break;
+    case 'left':
+      removeBorderLeft(currentIndex);
+      removeBorderRight(newIndex);
+      break;
+    case 'up':
+      removeBorderTop(currentIndex);
+      removeBorderBottom(newIndex);
+      break;
+    case 'down':
+      removeBorderBottom(currentIndex);
+      removeBorderTop(newIndex);
+      break;
+  }
+}
 
 
 
-// console.log("Successful Path Array: ", successfulPathArray);
-// console.log(successfulPathArray[successfulPathArray.length - 1])
-// console.log(currentIndex);
-// console.log(fakePathArray);
+function removeBorderTop(index) {
+  gridArray[index].style.borderTop = "none";
+}
+function removeBorderBottom(index) {
+  gridArray[index].style.borderBottom = "none";
+}
+function removeBorderRight(index) {
+  gridArray[index].style.borderRight = "none";
+}
+function removeBorderLeft(index) {
+  gridArray[index].style.borderLeft = "none";
+}
 
 
-
-// // console.log(gridArray);
-
-
-
-
-
-
-// // console.log(checkIfWallPresent('up',99));
-
-// console.log("Possilbe Exit: ", checkPossibleExit(12));
-
-// // let number = 0;
-// // const xPosition = number % width;
-// // const yPosition = Math.floor(number / width);
-// // console.log('Can move left: ', xPosition > 0);
-// // console.log('Can move right: ', xPosition < (width - 1));
-// // console.log('Can move up: ', yPosition > 0);
-// // console.log('Can move down: ', yPosition < (width - 1));
-// // console.log()
-
-// // console.log(moveRight(currentIndex));
-// // console.log(moveLeft(currentIndex));
-// // console.log(moveUp(currentIndex));
-// // console.log(moveDown(currentIndex));
-
-// // randomNumber = generateRandomNumber();
-// // console.log(randomNumber);
