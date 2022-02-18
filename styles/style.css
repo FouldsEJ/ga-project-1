@@ -24,3 +24,19 @@ body {
   height: 10%;
 }
 
+
+.starting-square {
+  background-color: green;
+}
+
+.finishing-square {
+  background-color: red;
+}
+
+.successful-path {
+  background-color: orange;
+}
+
+.fake-path {
+  background-color: blue;
+}
