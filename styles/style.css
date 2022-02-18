@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.grid-wrapper {
+  height: 80vh;
+  margin: 20px 20px;
+  border: 1px red solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+
+.grid-wrapper div {
+  width: 10%;
+  border: green 1px solid;
+  height: 10%;
+}
+
