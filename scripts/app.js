@@ -109,32 +109,32 @@ function checkPossibleExit(index) {
 
 
 
-let successfulPathArray = [0, 1, 2, 12, 22, 23, 24, 34];
+let successfulPathArray = [0];
 let fakePathArray =[];
-let currentIndex = 34;
+let currentIndex = 0;
 let randomNumber = null;
 let newIndex = null;
+let moveDirection = null;
 
-gridArray[1].classList.add('successful-path');
-gridArray[2].classList.add('successful-path');
-gridArray[12].classList.add('successful-path');
-gridArray[22].classList.add('successful-path');
-gridArray[23].classList.add('successful-path');
-gridArray[24].classList.add('successful-path');
-gridArray[34].classList.add('successful-path');
+// gridArray[1].classList.add('successful-path');
+// gridArray[2].classList.add('successful-path');
+// gridArray[12].classList.add('successful-path');
+// gridArray[22].classList.add('successful-path');
+// gridArray[23].classList.add('successful-path');
+// gridArray[24].classList.add('successful-path');
+// gridArray[34].classList.add('successful-path');
 
-gridArray[33].classList.add('successful-path');
-gridArray[44].classList.add('successful-path');
-gridArray[35].classList.add('successful-path');
-gridArray[25].classList.add('successful-path');
-gridArray[14].classList.add('successful-path');
-
-
-
+// gridArray[33].classList.add('successful-path');
+// gridArray[44].classList.add('successful-path');
+// gridArray[35].classList.add('successful-path');
+// gridArray[25].classList.add('successful-path');
+// gridArray[14].classList.add('successful-path');
 
 
 
 
+
+function createMaze() {
 
 // Checking if there is a possible exit
 while (checkPossibleExit(currentIndex) === false) {
@@ -145,10 +145,70 @@ while (checkPossibleExit(currentIndex) === false) {
   currentIndex = successfulPathArray[successfulPathArray.length - 1];
 }
 
-console.log("Successful Path Array: ", successfulPathArray);
-console.log(successfulPathArray[successfulPathArray.length - 1])
-console.log(currentIndex);
-console.log(fakePathArray);
+
+
+
+  // Once possible exit is known generate random direction
+  randomNumber = generateRandomNumber();
+  switch (randomNumber) {
+    case 1:
+      newIndex = moveUp(currentIndex);
+      moveDirection = 'up';
+      break;
+    case 2:
+      newIndex = moveRight(currentIndex);
+      moveDirection = 'right';
+      break;
+    case 3:
+      newIndex = moveDown(currentIndex);
+      moveDirection = 'down';
+      break;
+    case 4:
+      newIndex = moveLeft(currentIndex);
+      moveDirection = 'left';
+      break;
+  }
+
+  console.log("Current Index: ", currentIndex);
+  console.log("New Index: ", newIndex, " Move Direction: ", moveDirection);
+
+
+  // Check to see if newIndex has successful-path class or fake-path class or is a wall
+  if (checkIfWallPresent(moveDirection, currentIndex) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
+    gridArray[newIndex].classList.add('successful-path');
+    successfulPathArray.push(newIndex);
+    currentIndex = newIndex;
+  }
+  else {
+    console.log("Ouch");
+    createMaze();
+  }
+}
+
+
+while (gridArray[currentIndex].classList.contains('finishing-square')===false) {
+  createMaze();
+
+}
+
+
+
+console.log("Current index: ", currentIndex);
+console.log("newIndex: ", newIndex);
+console.log("SuccessfulPath Array: ", successfulPathArray);
+console.log("Fake path Array: ", fakePathArray);
+
+
+
+
+
+
+
+
+// console.log("Successful Path Array: ", successfulPathArray);
+// console.log(successfulPathArray[successfulPathArray.length - 1])
+// console.log(currentIndex);
+// console.log(fakePathArray);
 
 
 
