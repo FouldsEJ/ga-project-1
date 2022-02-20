@@ -1,6 +1,6 @@
 
 
-// 1) Creation of Grid
+//! 1) Creation of Grid
 
 const width = 10;
 const gridSize = width * width;
@@ -24,9 +24,9 @@ createGrid();
 
 
 
-// 2) Create a start and finish square
+//! 2) Create a start and finish square
 gridArray[0].classList.add('starting-square', 'successful-path');
-gridArray[gridArray.length-1].classList.add('finishing-square');
+gridArray[gridArray.length - 1].classList.add('finishing-square');
 
 
 
@@ -35,11 +35,36 @@ gridArray[gridArray.length-1].classList.add('finishing-square');
 
 
 
-// 3) Create successful path
+//! 3) Create successful path
 
 // Generates a random number for new direction
 function generateRandomNumber() {
   return (Math.floor(Math.random() * 4) + 1);
+}
+
+function generateRandomDirection(currentIndex) {
+  randomNumber = generateRandomNumber();
+  console.log("Current Index inside of ranodm number: ", currentIndex);
+  switch (randomNumber) {
+    case 1:
+      newIndex = moveUp(currentIndex);
+      moveDirection = 'up';
+      break;
+    case 2:
+      newIndex = moveRight(currentIndex);
+      moveDirection = 'right';
+      break;
+    case 3:
+      newIndex = moveDown(currentIndex);
+      moveDirection = 'down';
+      break;
+    case 4:
+      newIndex = moveLeft(currentIndex);
+      moveDirection = 'left';
+      break;
+  }
+
+  console.log("New Index Inside randomNumber: ", newIndex);
 }
 
 function moveRight(index) {
@@ -62,7 +87,7 @@ function moveDown(index) {
 function checkIfWallPresent(direction, currentIndex) {
   const xPosition = currentIndex % width;
   const yPosition = Math.floor(currentIndex / width);
-  
+
   // Considers direction and current index x/y positions to see if it can move.
   // Returns false if no wall in that direction
   switch (direction) {
@@ -91,23 +116,25 @@ function checkIfFakePathClass(index) {
   return gridArray[index].classList.contains('fake-path');
 }
 
+
+function checkIfFakePathClassTwo(index) {
+  return gridArray[index].classList.contains('fake-path-two');
+}
+
 // Checks if index has any possible exits that do not contain a successfulPath or fakePath class or if its a wall
 function checkPossibleExit(index) {
-  return ((checkIfWallPresent('up', index) === false && checkIfFakePathClass(moveUp(index)) === false && checkIfSuccessfulPathClass(moveUp(index)) === false) || 
-  
+  return ((checkIfWallPresent('up', index) === false && checkIfFakePathClass(moveUp(index)) === false && checkIfSuccessfulPathClass(moveUp(index)) === false) ||
+
     (checkIfWallPresent('right', index) === false && checkIfFakePathClass(moveRight(index)) === false && checkIfSuccessfulPathClass(moveRight(index)) === false) ||
-  
+
     (checkIfWallPresent('down', index) === false && checkIfFakePathClass(moveDown(index)) === false && checkIfSuccessfulPathClass(moveDown(index)) === false) ||
-  
-    (checkIfWallPresent('left', index) === false && checkIfFakePathClass(moveLeft(index)) === false && checkIfSuccessfulPathClass(moveLeft(index)) === false) )
+
+    (checkIfWallPresent('left', index) === false && checkIfFakePathClass(moveLeft(index)) === false && checkIfSuccessfulPathClass(moveLeft(index)) === false))
 }
 
 
-
-
-
 let successfulPathArray = [0];
-let fakePathArray =[];
+let fakePathArray = [];
 let currentIndex = 0;
 let randomNumber = null;
 let newIndex = null;
@@ -115,42 +142,23 @@ let moveDirection = null;
 
 function createSuccessfulPath() {
 
-// Checking if there is a possible exit
-while (checkPossibleExit(currentIndex) === false) {
-  gridArray[currentIndex].classList.remove('successful-path')
-  gridArray[currentIndex].classList.add('fake-path');
-  fakePathArray.push(currentIndex);
-  successfulPathArray.pop();
-  currentIndex = successfulPathArray[successfulPathArray.length - 1];
-}
-
-
-  // Once possible exit is known generate random direction
-  randomNumber = generateRandomNumber();
-  switch (randomNumber) {
-    case 1:
-      newIndex = moveUp(currentIndex);
-      moveDirection = 'up';
-      break;
-    case 2:
-      newIndex = moveRight(currentIndex);
-      moveDirection = 'right';
-      break;
-    case 3:
-      newIndex = moveDown(currentIndex);
-      moveDirection = 'down';
-      break;
-    case 4:
-      newIndex = moveLeft(currentIndex);
-      moveDirection = 'left';
-      break;
+  // Checking if there is a possible exit
+  while (checkPossibleExit(currentIndex) === false) {
+    gridArray[currentIndex].classList.remove('successful-path')
+    gridArray[currentIndex].classList.add('fake-path');
+    fakePathArray.push(currentIndex);
+    successfulPathArray.pop();
+    currentIndex = successfulPathArray[successfulPathArray.length - 1];
   }
 
 
+  // Once possible exit is known generate random direction
+  generateRandomDirection(currentIndex);
+
 
   // Check to see if newIndex has successful-path class or fake-path class or is a wall, if true, re-run function, if not then add 
-  // successful-path class to newIndex, add newIndex number to successfulPath array, and update currentIndex
-  // to newIndex.
+  // successful-path class to newIndex, add newIndex number to successfulPath array, remove borders from currentIndex and new Index
+  // and update currentIndex to newIndex.
   if (checkIfWallPresent(moveDirection, currentIndex) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
     gridArray[newIndex].classList.add('successful-path');
     successfulPathArray.push(newIndex);
@@ -163,7 +171,7 @@ while (checkPossibleExit(currentIndex) === false) {
 }
 
 // Run createMaze function
-while (gridArray[currentIndex].classList.contains('finishing-square')===false) {
+while (gridArray[currentIndex].classList.contains('finishing-square') === false) {
   createSuccessfulPath();
 
 }
@@ -178,8 +186,7 @@ console.log("Fake path Array: ", fakePathArray);
 
 
 
-
-// 4) Deal with the boarder
+//! 4) Deal with the boarder
 
 function borderRemovalDecision(direction, currentIndex, newIndex) {
   switch (direction) {
@@ -218,7 +225,119 @@ function removeBorderLeft(index) {
 
 
 
-// Introduce "ball" into the game
+
+
+
+// ! Removing first lot of fake path
+gridArray.forEach((item) => {
+  if (item.classList.contains('fake-path')) {
+    // item.style.background = 'brown';
+    item.classList.remove('fake-path');
+    item.style.border = 'green 1px solid'
+  }
+})
+
+
+
+
+
+
+
+//! Intoduce fake path in all fird squares not currently used
+
+
+
+// Check for first grid cell without a class of succesful-path or fake-path
+
+let emptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
+let fakePathArrayTwo = [];
+let array = [];
+
+while (emptyCell != -1) {
+
+  // Removes the left hand boarder of emptyCell square and right hand border of adjecent square,
+  // as long as it is not in the first column, in which case it removes the top and bottom borders
+  if (emptyCell % width === 0) {
+    removeBorderTop(emptyCell);
+    removeBorderBottom(emptyCell - width);
+  }
+  else {
+    console.log("border left")
+    removeBorderLeft(emptyCell)
+    console.log("border left again")
+    removeBorderRight(emptyCell - 1);
+  }
+
+  gridArray[emptyCell].classList.add('fake-path');
+  fakePathArrayTwo.push(emptyCell);
+  array.push(emptyCell);
+
+  console.log("fakepatharraytwo: ", fakePathArrayTwo);
+  console.log("array: ", array)
+
+  while (array.length != 0) {
+    let possibleExit = checkPossibleExit(emptyCell);
+    console.log("Possible Exit: ", possibleExit);
+
+    while (possibleExit === false) {
+      array.pop();
+      console.log("Array popped: ", array);
+      emptyCell = array[array.length - 1];
+      console.log("Empty cell: ", emptyCell);
+      if (array.length === 0) {
+        possibleExit = true;
+      }
+      else {
+        possibleExit = checkPossibleExit(emptyCell)
+      }
+    }
+    console.log("Success")
+
+    if (array.length === 0) {
+
+
+    }
+    else {
+      createFakePath();
+    }
+  }
+
+  console.log("Fake path two Array:", fakePathArrayTwo);
+  console.log("array: ", array);
+  console.log("Empty Cell 1: ", emptyCell)
+  emptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
+  console.log("Empty Cell 2: ", emptyCell)
+}
+
+function createFakePath() {
+
+  generateRandomDirection(emptyCell);
+
+  if (checkIfWallPresent(moveDirection, emptyCell) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
+    gridArray[newIndex].classList.add('fake-path');
+    fakePathArrayTwo.push(newIndex);
+    array.push(newIndex);
+    borderRemovalDecision(moveDirection, emptyCell, newIndex);
+    emptyCell = newIndex;
+  }
+  else {
+    console.log("Well done");
+    createFakePath();
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//! Introduce "ball" into the game
 
 let currentPlayerIndex = 0;
 
@@ -253,6 +372,6 @@ function handleKeyPress(event) {
       currentPlayerIndex = moveDown(currentPlayerIndex);
       addBall(currentPlayerIndex);
       break;
-    default: 
+    default:
   }
 }

@@ -24,6 +24,10 @@ body {
   height: 10%;
 }
 
+.successful-path {
+  background-color: pink;
+}
+
 
 .starting-square {
   background-color: green;
@@ -33,15 +37,14 @@ body {
   background-color: red;
 }
 
-.successful-path {
-  background-color: orange;
-}
+
 
 .fake-path {
-  background-color: blue;
+  background-color: pink;
 }
 
 
 .ball {
   background-color: aqua;
 }
+
