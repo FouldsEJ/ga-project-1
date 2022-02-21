@@ -116,11 +116,6 @@ function checkIfFakePathClass(index) {
   return gridArray[index].classList.contains('fake-path');
 }
 
-
-function checkIfFakePathClassTwo(index) {
-  return gridArray[index].classList.contains('fake-path-two');
-}
-
 // Checks if index has any possible exits that do not contain a successfulPath or fakePath class or if its a wall
 function checkPossibleExit(index) {
   return ((checkIfWallPresent('up', index) === false && checkIfFakePathClass(moveUp(index)) === false && checkIfSuccessfulPathClass(moveUp(index)) === false) ||
@@ -146,9 +141,13 @@ function createSuccessfulPath() {
   while (checkPossibleExit(currentIndex) === false) {
     gridArray[currentIndex].classList.remove('successful-path')
     gridArray[currentIndex].classList.add('fake-path');
+    // gridArray[currentIndex].style.borderTop = "thick solid #0000FF";
     fakePathArray.push(currentIndex);
-    successfulPathArray.pop();
+    let poppedValue = successfulPathArray.pop();
     currentIndex = successfulPathArray[successfulPathArray.length - 1];
+    // gridArray[currentIndex].style.border = "thick solid green";
+    addBoarderAtIntersect(currentIndex, poppedValue)
+
   }
 
 
@@ -222,8 +221,22 @@ function removeBorderLeft(index) {
   gridArray[index].style.borderLeft = "none";
 }
 
+// Adds a border for the unusual case of an intersect between fake-path and successful-path, missing a border
+function addBoarderAtIntersect (currentIndex, previousIndex) {
+  if (currentIndex - previousIndex === width) {
+    gridArray[currentIndex].style.borderTop = 'green 1px solid'
+  }
+  else if (currentIndex - previousIndex === -width) {
+    gridArray[currentIndex].style.borderBottom = 'green 1px solid'
+  }
+  else if (currentIndex - 1 === previousIndex) {
+    gridArray[currentIndex].style.borderLeft = 'green 1px solid'
+  }
+  else if (currentIndex + 1 === previousIndex) {
+    gridArray[currentIndex].style.borderRight = 'green 1px solid'
 
-
+  }
+}
 
 
 
@@ -231,7 +244,6 @@ function removeBorderLeft(index) {
 // ! Removing first lot of fake path
 gridArray.forEach((item) => {
   if (item.classList.contains('fake-path')) {
-    // item.style.background = 'brown';
     item.classList.remove('fake-path');
     item.style.border = 'green 1px solid'
   }
@@ -243,7 +255,7 @@ gridArray.forEach((item) => {
 
 
 
-//! Intoduce fake path in all fird squares not currently used
+//! Intoduce fake path in all grid squares not currently used
 
 
 
@@ -340,6 +352,7 @@ function createFakePath() {
 //! Introduce "ball" into the game
 
 let currentPlayerIndex = 0;
+let newPlayerIndex = null;
 
 function addBall(index) {
   gridArray[index].classList.add('ball');
@@ -353,25 +366,50 @@ function removeBall(index) {
 document.addEventListener('keyup', handleKeyPress)
 
 function handleKeyPress(event) {
-  removeBall(currentPlayerIndex);
   console.log(event);
   switch (event.which) {
     case 39:
-      currentPlayerIndex = moveRight(currentPlayerIndex);
-      addBall(currentPlayerIndex);
+      newPlayerIndex = moveRight(currentPlayerIndex);
+      direction = 'right';
       break;
     case 37:
-      currentPlayerIndex = moveLeft(currentPlayerIndex);
-      addBall(currentPlayerIndex);
+      newPlayerIndex = moveLeft(currentPlayerIndex);
+      direction = 'left';
       break;
     case 38:
-      currentPlayerIndex = moveUp(currentPlayerIndex);
-      addBall(currentPlayerIndex);
+      newPlayerIndex = moveUp(currentPlayerIndex);
+      direction = 'up';
       break;
     case 40:
-      currentPlayerIndex = moveDown(currentPlayerIndex);
-      addBall(currentPlayerIndex);
+      newPlayerIndex = moveDown(currentPlayerIndex);
+      direction = 'down';
       break;
     default:
+  }
+  if (checkIfWallPresent(direction, currentPlayerIndex) === false && checkIfBoardersPresent(direction, currentPlayerIndex) === 'none') {
+    removeBall(currentPlayerIndex);
+    addBall(newPlayerIndex);
+    currentPlayerIndex = newPlayerIndex;
+  }
+  else{};
+  
+}
+
+
+function checkIfBoardersPresent(direction, currentPlayerIndex) {
+  switch (direction) {
+    case 'right':
+      console.log(gridArray[currentPlayerIndex].style.borderRight);
+      return (gridArray[currentPlayerIndex].style.borderRight)
+      break;
+    case 'left':
+      return (gridArray[currentPlayerIndex].style.borderLeft);
+      break;
+    case 'up':
+      return (gridArray[currentPlayerIndex].style.borderTop);
+      break;
+    case 'down':
+      return (gridArray[currentPlayerIndex].style.borderBottom);
+      break;
   }
 }
