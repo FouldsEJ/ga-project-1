@@ -9,7 +9,7 @@ body {
 
 .grid-wrapper {
   height: 80vh;
-  margin: 20px 20px;
+  margin: 40px 40px;
   border: 1px red solid;
   display: flex;
   justify-content: center;
@@ -43,5 +43,10 @@ body {
 
 .ball {
   background-color: aqua;
+}
+
+.starter-screen {
+  background-color: grey;
+  border: none;
 }
 

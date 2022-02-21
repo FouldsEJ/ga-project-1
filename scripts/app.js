@@ -2,7 +2,7 @@
 
 //! 1) Creation of Grid
 
-const width = 10;
+const width = 5;
 const gridSize = width * width;
 const gridArray = [];
 
@@ -15,12 +15,15 @@ function createGrid() {
     const gridSquare = document.createElement('div');
     gridArray.push(gridSquare);
     gridSquare.id = i;
+    gridArray[i].style.width = `${100 / width}%`;
+    gridArray[i].style.height = `${100 / width}%`;
     gridWrapper.appendChild(gridSquare);
   }
 
 }
 
 createGrid();
+
 
 
 
@@ -44,7 +47,6 @@ function generateRandomNumber() {
 
 function generateRandomDirection(currentIndex) {
   randomNumber = generateRandomNumber();
-  console.log("Current Index inside of ranodm number: ", currentIndex);
   switch (randomNumber) {
     case 1:
       newIndex = moveUp(currentIndex);
@@ -63,8 +65,6 @@ function generateRandomDirection(currentIndex) {
       moveDirection = 'left';
       break;
   }
-
-  console.log("New Index Inside randomNumber: ", newIndex);
 }
 
 function moveRight(index) {
@@ -222,7 +222,7 @@ function removeBorderLeft(index) {
 }
 
 // Adds a border for the unusual case of an intersect between fake-path and successful-path, missing a border
-function addBoarderAtIntersect (currentIndex, previousIndex) {
+function addBoarderAtIntersect(currentIndex, previousIndex) {
   if (currentIndex - previousIndex === width) {
     gridArray[currentIndex].style.borderTop = 'green 1px solid'
   }
@@ -391,8 +391,8 @@ function handleKeyPress(event) {
     addBall(newPlayerIndex);
     currentPlayerIndex = newPlayerIndex;
   }
-  else{};
-  
+  else { };
+
 }
 
 
@@ -413,3 +413,35 @@ function checkIfBoardersPresent(direction, currentPlayerIndex) {
       break;
   }
 }
+
+
+
+
+
+
+// ! Displaying maze
+
+// for (let i = 0; i < gridSize; i++) {
+//   gridArray[i].classList.add('starter-screen');
+// }
+
+// let i = -1;
+// const increaseNumber = setInterval(() => {
+//   i = i + 1;
+// }, 20)
+
+
+// // if (i < gridSize) {
+// //   const displayMaze = setInterval(() => {
+// //     gridArray[i].classList.remove('starter-screen');
+// //     gridArray[i].style.border
+    
+// //   }, 20)
+// // }
+// // else {
+// //   clearInterval(increaseNumber);
+// //   clearInterval(displayMaze);
+// // }
+  
+
+
