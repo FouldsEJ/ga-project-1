@@ -2,7 +2,7 @@
 
 //! 1) Creation of Grid
 
-const width = 5;
+const width = 20;
 const gridSize = width * width;
 const gridArray = [];
 
@@ -22,12 +22,11 @@ function createGrid() {
 
 }
 
+
+// Create the grid for the maze to be generated in
 createGrid();
 
-
-
-
-//! 2) Create a start and finish square
+// Assign a start and finish to the maze at the first grid square and the last
 gridArray[0].classList.add('starting-square', 'successful-path');
 gridArray[gridArray.length - 1].classList.add('finishing-square');
 
@@ -137,17 +136,15 @@ let moveDirection = null;
 
 function createSuccessfulPath() {
 
-  // Checking if there is a possible exit
+  // Checking if there is a possible exit - whilst there isn't revert back to previous gridSquare
+  // Also remove succesful-path class and add fake-path class to square
   while (checkPossibleExit(currentIndex) === false) {
     gridArray[currentIndex].classList.remove('successful-path')
     gridArray[currentIndex].classList.add('fake-path');
-    // gridArray[currentIndex].style.borderTop = "thick solid #0000FF";
     fakePathArray.push(currentIndex);
     let poppedValue = successfulPathArray.pop();
     currentIndex = successfulPathArray[successfulPathArray.length - 1];
-    // gridArray[currentIndex].style.border = "thick solid green";
     addBoarderAtIntersect(currentIndex, poppedValue)
-
   }
 
 
@@ -177,16 +174,12 @@ while (gridArray[currentIndex].classList.contains('finishing-square') === false)
 
 
 
-console.log("Current index: ", currentIndex);
-console.log("newIndex: ", newIndex);
-console.log("SuccessfulPath Array: ", successfulPathArray);
-console.log("Fake path Array: ", fakePathArray);
-
 
 
 
 //! 4) Deal with the boarder
 
+// Function to decide on which borders to remove when create paths.
 function borderRemovalDecision(direction, currentIndex, newIndex) {
   switch (direction) {
     case 'right':
@@ -208,15 +201,22 @@ function borderRemovalDecision(direction, currentIndex, newIndex) {
   }
 }
 
+// Remove top border function
 function removeBorderTop(index) {
   gridArray[index].style.borderTop = "none";
 }
+
+// Remove bottom border function
 function removeBorderBottom(index) {
   gridArray[index].style.borderBottom = "none";
 }
+
+// Remove right border function
 function removeBorderRight(index) {
   gridArray[index].style.borderRight = "none";
 }
+
+// Remove left border function
 function removeBorderLeft(index) {
   gridArray[index].style.borderLeft = "none";
 }
@@ -242,6 +242,7 @@ function addBoarderAtIntersect(currentIndex, previousIndex) {
 
 
 // ! Removing first lot of fake path
+// Removes fake-path class from all grid-square containing it, leaving just a successful path
 gridArray.forEach((item) => {
   if (item.classList.contains('fake-path')) {
     item.classList.remove('fake-path');
@@ -261,79 +262,68 @@ gridArray.forEach((item) => {
 
 // Check for first grid cell without a class of succesful-path or fake-path
 
-let emptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
+let currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
 let fakePathArrayTwo = [];
 let array = [];
 
-while (emptyCell != -1) {
+while (currentEmptyCell != -1) {
 
-  // Removes the left hand boarder of emptyCell square and right hand border of adjecent square,
+  // Removes the left hand boarder of currentEmptyCell square and right hand border of adjacent square,
   // as long as it is not in the first column, in which case it removes the top and bottom borders
-  if (emptyCell % width === 0) {
-    removeBorderTop(emptyCell);
-    removeBorderBottom(emptyCell - width);
+  if (currentEmptyCell % width === 0) {
+    removeBorderTop(currentEmptyCell);
+    removeBorderBottom(currentEmptyCell - width);
   }
   else {
-    console.log("border left")
-    removeBorderLeft(emptyCell)
-    console.log("border left again")
-    removeBorderRight(emptyCell - 1);
+    removeBorderLeft(currentEmptyCell)
+    removeBorderRight(currentEmptyCell - 1);
   }
 
-  gridArray[emptyCell].classList.add('fake-path');
-  fakePathArrayTwo.push(emptyCell);
-  array.push(emptyCell);
+  // Addes the fake-path class to the currentEmptyCell index and adds the index to the fakePathTwo Array
+  gridArray[currentEmptyCell].classList.add('fake-path');
+  fakePathArrayTwo.push(currentEmptyCell);
+  array.push(currentEmptyCell);
 
   console.log("fakepatharraytwo: ", fakePathArrayTwo);
   console.log("array: ", array)
 
   while (array.length != 0) {
-    let possibleExit = checkPossibleExit(emptyCell);
+    let possibleExit = checkPossibleExit(currentEmptyCell);
     console.log("Possible Exit: ", possibleExit);
 
     while (possibleExit === false) {
       array.pop();
       console.log("Array popped: ", array);
-      emptyCell = array[array.length - 1];
-      console.log("Empty cell: ", emptyCell);
+      currentEmptyCell = array[array.length - 1];
+      console.log("Empty cell: ", currentEmptyCell);
       if (array.length === 0) {
         possibleExit = true;
       }
       else {
-        possibleExit = checkPossibleExit(emptyCell)
+        possibleExit = checkPossibleExit(currentEmptyCell)
       }
     }
-    console.log("Success")
-
     if (array.length === 0) {
-
-
     }
     else {
       createFakePath();
     }
   }
-
-  console.log("Fake path two Array:", fakePathArrayTwo);
-  console.log("array: ", array);
-  console.log("Empty Cell 1: ", emptyCell)
-  emptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
-  console.log("Empty Cell 2: ", emptyCell)
+  currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
 }
 
 function createFakePath() {
 
-  generateRandomDirection(emptyCell);
+  generateRandomDirection(currentEmptyCell);
 
-  if (checkIfWallPresent(moveDirection, emptyCell) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
+  if (checkIfWallPresent(moveDirection, currentEmptyCell) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
     gridArray[newIndex].classList.add('fake-path');
     fakePathArrayTwo.push(newIndex);
     array.push(newIndex);
-    borderRemovalDecision(moveDirection, emptyCell, newIndex);
-    emptyCell = newIndex;
+    borderRemovalDecision(moveDirection, currentEmptyCell, newIndex);
+    currentEmptyCell = newIndex;
   }
   else {
-    console.log("Well done");
     createFakePath();
   }
 }
@@ -353,6 +343,7 @@ function createFakePath() {
 
 let currentPlayerIndex = 0;
 let newPlayerIndex = null;
+let playerMoves = 0;
 
 function addBall(index) {
   gridArray[index].classList.add('ball');
@@ -362,8 +353,12 @@ function removeBall(index) {
   gridArray[index].classList.remove('ball');
 }
 
+function addPlayerFollow(index) {
+  gridArray[index].classList.add('player-follower');
+}
 
-document.addEventListener('keyup', handleKeyPress)
+
+document.addEventListener('keydown', handleKeyPress)
 
 function handleKeyPress(event) {
   console.log(event);
@@ -388,8 +383,11 @@ function handleKeyPress(event) {
   }
   if (checkIfWallPresent(direction, currentPlayerIndex) === false && checkIfBoardersPresent(direction, currentPlayerIndex) === 'none') {
     removeBall(currentPlayerIndex);
+    addPlayerFollow(currentPlayerIndex);
     addBall(newPlayerIndex);
     currentPlayerIndex = newPlayerIndex;
+    playerMoves++;
+    console.log("Player moves: ", playerMoves);
   }
   else { };
 
@@ -420,10 +418,18 @@ function checkIfBoardersPresent(direction, currentPlayerIndex) {
 
 
 // ! Displaying maze
+removeMaze();
+function removeMaze() {
+for (let i = 0; i < gridSize; i++) {
+  gridArray[i].classList.add('starter-screen');
+}
+}
 
-// for (let i = 0; i < gridSize; i++) {
-//   gridArray[i].classList.add('starter-screen');
-// }
+function addMaze() {
+  for (let i = 0; i < gridSize; i++) {
+    gridArray[i].classList.remove('starter-screen');
+  }
+}
 
 // let i = -1;
 // const increaseNumber = setInterval(() => {
@@ -431,17 +437,66 @@ function checkIfBoardersPresent(direction, currentPlayerIndex) {
 // }, 20)
 
 
-// // if (i < gridSize) {
-// //   const displayMaze = setInterval(() => {
-// //     gridArray[i].classList.remove('starter-screen');
-// //     gridArray[i].style.border
+// if (i < gridSize) {
+//   const displayMaze = setInterval(() => {
+//     gridArray[i].classList.remove('starter-screen');
+//     gridArray[i].style.border
     
-// //   }, 20)
-// // }
-// // else {
-// //   clearInterval(increaseNumber);
-// //   clearInterval(displayMaze);
-// // }
+//   }, 20)
+// }
+// else {
+//   clearInterval(increaseNumber);
+//   clearInterval(displayMaze);
+// }
   
 
 
+// ! Managing press play button
+const openingBanner = document.querySelector('.start-menu-display');
+const playGameButton = document.querySelector('.play-game')
+
+playGameButton.addEventListener('click', managePlayGameButton);
+
+function managePlayGameButton(event) {
+  console.log(event);
+  openingBanner.style.visibility = 'hidden';
+  addMaze()
+  countDown();
+}
+
+
+
+// // ! Adding golden nuggets
+// const goldenNuggets = [];
+
+// for (let i=0; i<(width/2); i++) {
+//   const n = (Math.floor(Math.random() * 100));
+//   goldenNuggets[i] = n;
+//   gridArray[n].classList.add('golden-nugget');
+// }
+
+// console.log(goldenNuggets);
+
+
+
+// ! Adding timer to game
+
+function countDown() {
+  const timerScreen = document.querySelector('.timer');
+  let startingSeconds = 65;
+
+  timer = setInterval(() => {
+    if (startingSeconds > 0) {
+      startingSeconds--
+      let minutes = Math.floor(startingSeconds/60);
+      let seconds = startingSeconds % 60;
+      seconds = seconds < 10 ? '0' + seconds : seconds;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      timerScreen.innerHTML = `${minutes}:${seconds}`;
+    }
+    else {
+      clearInterval(timer);
+      console.log("finished");
+    }
+  }, 1000)
+}
