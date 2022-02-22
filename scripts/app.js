@@ -2,7 +2,7 @@
 
 //! 1) Creation of Grid
 
-const width = 20;
+const width = 5;
 const gridSize = width * width;
 const gridArray = [];
 
@@ -388,6 +388,9 @@ function handleKeyPress(event) {
     currentPlayerIndex = newPlayerIndex;
     playerMoves++;
     console.log("Player moves: ", playerMoves);
+    if (gridArray[currentPlayerIndex].classList.contains('finishing-square')) {
+      winnerBanner.style.visibility = 'visible'
+    }
   }
   else { };
 
@@ -454,14 +457,29 @@ function addMaze() {
 // ! Managing press play button
 const openingBanner = document.querySelector('.start-menu-display');
 const playGameButton = document.querySelector('.play-game')
+const losingBanner = document.querySelector('.loser-display');
+const winnerBanner = document.querySelector('.winner-display');
+const playGameAgainButtons = document.querySelectorAll('.play-again')
+
+losingBanner.style.visibility = 'hidden';
+winnerBanner.style.visibility = 'hidden';
+
+
 
 playGameButton.addEventListener('click', managePlayGameButton);
+
+playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
 
 function managePlayGameButton(event) {
   console.log(event);
   openingBanner.style.visibility = 'hidden';
   addMaze()
   countDown();
+}
+
+function managePlayAgainButtons(event) {
+  console.log("You pressed it")
+
 }
 
 

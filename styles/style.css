@@ -77,7 +77,9 @@ body {
   border: none !important;
 }
 
-.start-menu-display {
+.start-menu-display, 
+.loser-display,
+.winner-display {
   background-color: lightsalmon;
   border: 2px solid black;
   text-align: center;
