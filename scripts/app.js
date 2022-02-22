@@ -273,6 +273,76 @@ function addPlayerFollow(index) {
   gridArray[index].classList.add('player-follower');
 }
 
+function checkIfBoardersPresent(direction, currentPlayerIndex) {
+  switch (direction) {
+    case 'right':
+      console.log(gridArray[currentPlayerIndex].style.borderRight);
+      return (gridArray[currentPlayerIndex].style.borderRight)
+      break;
+    case 'left':
+      return (gridArray[currentPlayerIndex].style.borderLeft);
+      break;
+    case 'up':
+      return (gridArray[currentPlayerIndex].style.borderTop);
+      break;
+    case 'down':
+      return (gridArray[currentPlayerIndex].style.borderBottom);
+      break;
+  }
+}
+
+
+// ! Displaying maze
+function hideMaze() {
+  for (let i = 0; i < gridSize; i++) {
+    gridArray[i].classList.add('starter-screen');
+  }
+}
+
+function unhideMaze() {
+  for (let i = 0; i < gridSize; i++) {
+    gridArray[i].classList.remove('starter-screen');
+
+  }
+}
+
+function animatedShowMaze() {
+  let i = -1;
+  const increaseNumber = setInterval(() => {
+    i = i + 1;
+  }, 2000)
+
+
+  if (i < gridSize) {
+    const displayMaze = setInterval(() => {
+      gridArray[i].classList.remove('starter-screen');
+      gridArray[i].style.border
+
+    }, 2000)
+  }
+  else {
+    clearInterval(increaseNumber);
+    clearInterval(displayMaze);
+  }
+}
+
+
+
+// ! Managing user pressing buttons
+function managePlayGameButton(event) {
+  openingBanner.style.visibility = 'hidden';
+  unhideMaze()
+  countDown();
+}
+
+function managePlayAgainButtons(event) {
+  console.log("You pressed it");
+  reset();
+  createGameBoard();
+  countDown();
+
+}
+
 function handleKeyPress(event) {
   console.log(event);
   switch (event.which) {
@@ -310,98 +380,22 @@ function handleKeyPress(event) {
 
 }
 
-function checkIfBoardersPresent(direction, currentPlayerIndex) {
-  switch (direction) {
-    case 'right':
-      console.log(gridArray[currentPlayerIndex].style.borderRight);
-      return (gridArray[currentPlayerIndex].style.borderRight)
-      break;
-    case 'left':
-      return (gridArray[currentPlayerIndex].style.borderLeft);
-      break;
-    case 'up':
-      return (gridArray[currentPlayerIndex].style.borderTop);
-      break;
-    case 'down':
-      return (gridArray[currentPlayerIndex].style.borderBottom);
-      break;
-  }
-}
-
-
-// ! Displaying maze
-function removeMaze() {
-  for (let i = 0; i < gridSize; i++) {
-    gridArray[i].classList.add('starter-screen');
-  }
-}
-
-function addMaze() {
-  for (let i = 0; i < gridSize; i++) {
-    gridArray[i].classList.remove('starter-screen');
-    
-  }
-}
-
-function animatedShowMaze() {
-  let i = -1;
-  const increaseNumber = setInterval(() => {
-    i = i + 1;
-  }, 2000)
-
-
-  if (i < gridSize) {
-    const displayMaze = setInterval(() => {
-      gridArray[i].classList.remove('starter-screen');
-      gridArray[i].style.border
-
-    }, 2000)
-  }
-  else {
-    clearInterval(increaseNumber);
-    clearInterval(displayMaze);
-  }
-}
-
-
-
-// ! Managing press play button
-function managePlayGameButton(event) {
-  console.log(event);
-  openingBanner.style.visibility = 'hidden';
-  addMaze()
-  countDown();
-}
-
-function managePlayAgainButtons(event) {
-  console.log("You pressed it")
-}
-
-
-
-// // ! Adding golden nuggets
-// const goldenNuggets = [];
-
-// for (let i=0; i<(width/2); i++) {
-//   const n = (Math.floor(Math.random() * 100));
-//   goldenNuggets[i] = n;
-//   gridArray[n].classList.add('golden-nugget');
-// }
-
-// console.log(goldenNuggets);
-
-
 
 // ! Adding timer to game
 function countDown() {
   const timerScreen = document.querySelector('.timer');
-  let startingSeconds = 65;
+  let startingSeconds = 10;
+  let minutes = Math.floor(startingSeconds / 60);
+  let seconds = startingSeconds % 60;
+  seconds = seconds < 10 ? '0' + seconds : seconds;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  timerScreen.innerHTML = `${minutes}:${seconds}`;
 
   timer = setInterval(() => {
     if (startingSeconds > 0) {
       startingSeconds--
-      let minutes = Math.floor(startingSeconds / 60);
-      let seconds = startingSeconds % 60;
+      minutes = Math.floor(startingSeconds / 60);
+      seconds = startingSeconds % 60;
       seconds = seconds < 10 ? '0' + seconds : seconds;
       minutes = minutes < 10 ? '0' + minutes : minutes;
       timerScreen.innerHTML = `${minutes}:${seconds}`;
@@ -409,6 +403,7 @@ function countDown() {
     else {
       clearInterval(timer);
       console.log("finished");
+      losingBanner.style.visibility = 'visible';
     }
   }, 1000)
 }
@@ -416,14 +411,9 @@ function countDown() {
 
 
 //! ALL CODE FLOW
-
-
-
-console.log("Hello")
-const width = 5;
-const gridSize = width * width;
-console.log(gridSize);
-const gridArray = [];
+let width = 20;
+let gridSize = width * width;
+let gridArray = [];
 
 let successfulPathArray = [0];
 let fakePathArray = [];
@@ -452,36 +442,80 @@ playGameButton.addEventListener('click', managePlayGameButton);
 playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
 document.addEventListener('keydown', handleKeyPress)
 
+function createGameBoard() {
+  losingBanner.style.visibility = 'hidden';
+  winnerBanner.style.visibility = 'hidden';
 
-losingBanner.style.visibility = 'hidden';
-winnerBanner.style.visibility = 'hidden';
+  // 1 - Create the grid for the maze to be generated in
+  createGrid();
 
-// 1 - Create the grid for the maze to be generated in
-createGrid();
+  // 2 - Assign a start and finish to the maze at the first grid square and the last
+  gridArray[0].classList.add('starting-square', 'successful-path');
+  gridArray[gridArray.length - 1].classList.add('finishing-square');
 
-// 2 - Assign a start and finish to the maze at the first grid square and the last
-gridArray[0].classList.add('starting-square', 'successful-path');
-gridArray[gridArray.length - 1].classList.add('finishing-square');
-
-// 3 - Run createMaze function
-while (gridArray[currentIndex].classList.contains('finishing-square') === false) {
-  createSuccessfulPath();
-}
-
-// 4 - Removes fake-path class from all grid squares containing it, leaving just a successful path.
-// This is done to improve the genuineness of the fake path trails when they are created as one
-gridArray.forEach((item) => {
-  if (item.classList.contains('fake-path')) {
-    item.classList.remove('fake-path');
-    item.style.border = 'green 1px solid'
+  // 3 - Run createMaze function
+  while (gridArray[currentIndex].classList.contains('finishing-square') === false) {
+    createSuccessfulPath();
   }
-})
 
-// 5 - Creates a fake path in all squares not taken up with a successful-path class
-// Check for first grid cell without a class of succesful-path or fake-path
-currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
-while (currentEmptyCell != -1) {
-  createFakePath();
+  // 4 - Removes fake-path class from all grid squares containing it, leaving just a successful path.
+  // This is done to improve the genuineness of the fake path trails when they are created as one
+  gridArray.forEach((item) => {
+    if (item.classList.contains('fake-path')) {
+      item.classList.remove('fake-path');
+      item.style.border = 'green 1px solid'
+    }
+  })
+
+  // 5 - Creates a fake path in all squares not taken up with a successful-path class
+  // Check for first grid cell without a class of succesful-path or fake-path
+  currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
+  while (currentEmptyCell != -1) {
+    createFakePath();
+  }
+
 }
 
-removeMaze();
+function reset() {
+  width = 5;
+  gridSize = width * width;
+  gridArray = [];
+  successfulPathArray = [0];
+  fakePathArray = [];
+  currentIndex = 0;
+  newIndex = null;
+  randomNumber = null;
+  moveDirection = null;
+  currentEmptyCell = null;
+  fakePathArrayTwo = [];
+  fakePathBuilder = [];
+  currentPlayerIndex = 0;
+  newPlayerIndex = null;
+  playerMoves = 0;
+  timer = undefined;
+
+  gridWrapper.innerHTML = "";
+}
+
+
+createGameBoard();
+hideMaze();
+
+
+
+
+
+
+
+
+
+// // ! Adding golden nuggets
+// const goldenNuggets = [];
+
+// for (let i=0; i<(width/2); i++) {
+//   const n = (Math.floor(Math.random() * 100));
+//   goldenNuggets[i] = n;
+//   gridArray[n].classList.add('golden-nugget');
+// }
+
+// console.log(goldenNuggets);
