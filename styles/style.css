@@ -6,12 +6,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Lato', sans-serif;
-  background-color: lightgrey;
+  background-color: #d2f6c5;
 }
 
 .title {
   text-align: center;
-  margin: 50px 0 0 0;
 }
 
 .game-body {
@@ -34,53 +33,73 @@ body {
 
 .grid-wrapper div {
   width: 10%;
-  border: green 1px solid;
+  border: black 1px solid;
   height: 10%;
 }
 
-
-
-.timer {
-  border: 2px solid green;
-  width: 100px;
-  text-align: center;
+.timer-and-score-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
+
+.timer,
+.score {
+  border: 2px solid black;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+
 .successful-path {
-  background-color: rgb(209, 208, 208);
+  background-color: #f6f7d4;
 }
 
 
 .starting-square {
-  background-color: green;
+  background-color: #28df99;
 }
 
 .finishing-square {
-  background-color: red;
+  /* background-color: rgb(218, 111, 111); */
+  background-image:
+      linear-gradient(45deg, black 25%, transparent 25%), 
+      linear-gradient(135deg, black 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, black 75%),
+      linear-gradient(135deg, transparent 75%, black 75%);
+    background-size:25px 25px; /* Must be a square */
+    background-position:0 0, 12.5px 0, 12.5px -12.5px, 0px 12.5px
 }
 
 .fake-path {
-  background-color: rgb(209, 208, 208);
+  background-color: #f6f7d4;
 }
 
 .player-follower {
-  background-color: lightsalmon;
+  background-color: #99f3bd;
 }
 
 
 .ball {
-  background-color: aqua;
+  background-color: #28df99;
+}
+
+.gold-coin {
+  background-color: gold;
 }
 
 .starter-screen {
   background-color: grey;
+  background-image: none;
   border: none !important;
 }
 
 .start-menu-display, 
 .loser-display,
 .winner-display {
-  background-color: lightsalmon;
+  background-color: #28df99;
   border: 2px solid black;
   text-align: center;
   max-width: 500px;
@@ -92,7 +111,4 @@ body {
 }
 
 
-.golden-nugget {
-  background-color: gold;
-}
 
