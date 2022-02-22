@@ -205,33 +205,37 @@ function createFakePath() {
 
   // Removes the left hand boarder of currentEmptyCell square and right hand border of adjacent square,
   // as long as it is not in the first column, in which case it removes the top and bottom borders
-  if (currentEmptyCell % width === 0) {
-    removeBorderTop(currentEmptyCell);
-    removeBorderBottom(currentEmptyCell - width);
+  if (currentIndex % width === 0) {
+    removeBorderTop(currentIndex);
+    removeBorderBottom(currentIndex - width);
   }
   else {
-    removeBorderLeft(currentEmptyCell)
-    removeBorderRight(currentEmptyCell - 1);
+    removeBorderLeft(currentIndex)
+    removeBorderRight(currentIndex- 1);
   }
 
-  // Addes the fake-path class to the currentEmptyCell index and adds the index to the fakePathTwo Array and fakePathBuilder array
-  gridArray[currentEmptyCell].classList.add('fake-path');
-  fakePathArrayTwo.push(currentEmptyCell);
-  fakePathBuilder.push(currentEmptyCell);
+  // Addes the fake-path class to the currentEmptyCell index and adds the index to the fakePath Array and fakePathBuilder array
+  gridArray[currentIndex].classList.add('fake-path');
+  fakePathArray.push(currentIndex);
+  fakePathBuilder.push(currentIndex);
 
 
-
+// While the fakePathBuilder array has items in it run the following code
+// If the fakePathBuilder array is empty, then a new emptyCell needs to be found. There is no where
+// else to go on the possible path
   while (fakePathBuilder.length != 0) {
-    let possibleExit = checkPossibleExit(currentEmptyCell);
 
+    // While there is no possible exit from the current cell, revert back to the previous cell (stored in
+    // the fakePathBuilder array). If fakePathBuilderArray has nothing left in it, exit while loop
+    let possibleExit = checkPossibleExit(currentIndex);
     while (possibleExit === false) {
       fakePathBuilder.pop();
-      currentEmptyCell = fakePathBuilder[fakePathBuilder.length - 1];
+      currentIndex = fakePathBuilder[fakePathBuilder.length - 1];
       if (fakePathBuilder.length === 0) {
         possibleExit = true;
       }
       else {
-        possibleExit = checkPossibleExit(currentEmptyCell)
+        possibleExit = checkPossibleExit(currentIndex)
       }
     }
     if (fakePathBuilder.length === 0) {
@@ -240,24 +244,26 @@ function createFakePath() {
       addToFakePath();
     }
   }
-  currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
 }
 
 function addToFakePath() {
 
-  generateRandomDirection(currentEmptyCell);
+  generateRandomDirection(currentIndex);
 
-  if (checkIfWallPresent(moveDirection, currentEmptyCell) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
+  if (checkIfWallPresent(moveDirection, currentIndex) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
     gridArray[newIndex].classList.add('fake-path');
-    fakePathArrayTwo.push(newIndex);
+    fakePathArray.push(newIndex);
     fakePathBuilder.push(newIndex);
-    borderRemovalDecision(moveDirection, currentEmptyCell, newIndex);
-    currentEmptyCell = newIndex;
+    borderRemovalDecision(moveDirection, currentIndex, newIndex);
+    currentIndex = newIndex;
   }
   else {
     addToFakePath();
   }
 }
+
+
+
 
 
 //! Introduce "ball" into the game
@@ -331,16 +337,42 @@ function animatedShowMaze() {
 // ! Managing user pressing buttons
 function managePlayGameButton(event) {
   openingBanner.style.visibility = 'hidden';
-  unhideMaze()
+  unhideMaze();
+  document.addEventListener('keydown', handleKeyPress);
   countDown();
 }
 
 function managePlayAgainButtons(event) {
-  console.log("You pressed it");
+  document.addEventListener('keydown', handleKeyPress);
   reset();
   createGameBoard();
   countDown();
 
+}
+
+function manageRetryLevelButton(event) {
+  console.log("Retry level");
+  currentPlayerIndex = 0;
+  newPlayerIndex = null;
+  playerMoves = 0;
+  timer = undefined;
+  countDown();
+  for (let i=0; i<gridSize; i++) {
+    gridArray[i].classList.remove('player-follower', 'ball')
+  }
+  winnerBanner.style.visibility = 'hidden';
+}
+
+function manageNextLevelButton(event) {
+  console.log("Next level");
+  let currentWidth = width;
+  reset();
+  console.log(width);
+  width = currentWidth + 2;
+  gridSize = width * width;
+  console.log(width);
+  createGameBoard();
+  countDown();
 }
 
 function handleKeyPress(event) {
@@ -372,12 +404,23 @@ function handleKeyPress(event) {
     playerMoves++;
     console.log("Player moves: ", playerMoves);
     if (gridArray[currentPlayerIndex].classList.contains('finishing-square')) {
-      winnerBanner.style.visibility = 'visible';
-      clearInterval(timer);
+      displayAndFormatWinnerBanner();
     }
   }
   else { };
 
+}
+
+// ! Formatting Winning Banner
+function displayAndFormatWinnerBanner() {
+  winnerBanner.style.visibility = 'visible';
+  const winnerBannerH2 = document.querySelector('.winner-display h2');
+  const winnerBannerP = document.querySelector('.winner-display p');
+  console.log(winnerBannerH2);
+  winnerBannerH2.innerText = 'Congratulations!! You completed level ${level}';
+  winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length-1} moves`
+  clearInterval(timer);
+  
 }
 
 
@@ -402,8 +445,9 @@ function countDown() {
     }
     else {
       clearInterval(timer);
-      console.log("finished");
       losingBanner.style.visibility = 'visible';
+      document.removeEventListener('keydown', handleKeyPress)
+
     }
   }, 1000)
 }
@@ -411,7 +455,7 @@ function countDown() {
 
 
 //! ALL CODE FLOW
-let width = 20;
+let width = 4;
 let gridSize = width * width;
 let gridArray = [];
 
@@ -422,8 +466,6 @@ let newIndex = null;
 let randomNumber = null;
 let moveDirection = null;
 
-let currentEmptyCell = null;
-let fakePathArrayTwo = [];
 let fakePathBuilder = [];
 
 let currentPlayerIndex = 0;
@@ -438,9 +480,12 @@ const playGameButton = document.querySelector('.play-game')
 const losingBanner = document.querySelector('.loser-display');
 const winnerBanner = document.querySelector('.winner-display');
 const playGameAgainButtons = document.querySelectorAll('.play-again')
+const retryLevelButton = document.querySelector('.retry-level')
+const nextLevelButton = document.querySelector('.next-level');
 playGameButton.addEventListener('click', managePlayGameButton);
 playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
-document.addEventListener('keydown', handleKeyPress)
+retryLevelButton.addEventListener('click', manageRetryLevelButton);
+nextLevelButton.addEventListener('click', manageNextLevelButton);
 
 function createGameBoard() {
   losingBanner.style.visibility = 'hidden';
@@ -464,14 +509,18 @@ function createGameBoard() {
     if (item.classList.contains('fake-path')) {
       item.classList.remove('fake-path');
       item.style.border = 'green 1px solid'
+      fakePathArray = [];
     }
   })
 
   // 5 - Creates a fake path in all squares not taken up with a successful-path class
   // Check for first grid cell without a class of succesful-path or fake-path
-  currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
-  while (currentEmptyCell != -1) {
+  currentIndex = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
+  while (currentIndex != -1) {
+    // Creates a fake path in next block of cells
     createFakePath();
+    // Updates currentIndex to next empty cell
+    currentIndex = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
   }
 
 }
@@ -486,8 +535,6 @@ function reset() {
   newIndex = null;
   randomNumber = null;
   moveDirection = null;
-  currentEmptyCell = null;
-  fakePathArrayTwo = [];
   fakePathBuilder = [];
   currentPlayerIndex = 0;
   newPlayerIndex = null;
@@ -498,10 +545,11 @@ function reset() {
 }
 
 
+
 createGameBoard();
 hideMaze();
 
-
+console.log("Fake path array: ", fakePathArray);
 
 
 
@@ -519,3 +567,14 @@ hideMaze();
 // }
 
 // console.log(goldenNuggets);
+
+
+class Level {
+  constructor(width, time) {
+    this.width = width;
+    this.time = time;
+  }
+}
+
+
+const levelOne = new Level(5, 20);
