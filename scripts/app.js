@@ -1,14 +1,6 @@
 
 
 //! 1) Creation of Grid
-
-const width = 5;
-const gridSize = width * width;
-const gridArray = [];
-
-const gridWrapper = document.querySelector('.grid-wrapper');
-
-
 function createGrid() {
 
   for (let i = 0; i < gridSize; i++) {
@@ -21,20 +13,6 @@ function createGrid() {
   }
 
 }
-
-
-// Create the grid for the maze to be generated in
-createGrid();
-
-// Assign a start and finish to the maze at the first grid square and the last
-gridArray[0].classList.add('starting-square', 'successful-path');
-gridArray[gridArray.length - 1].classList.add('finishing-square');
-
-
-
-
-
-
 
 
 //! 3) Create successful path
@@ -126,14 +104,6 @@ function checkPossibleExit(index) {
     (checkIfWallPresent('left', index) === false && checkIfFakePathClass(moveLeft(index)) === false && checkIfSuccessfulPathClass(moveLeft(index)) === false))
 }
 
-
-let successfulPathArray = [0];
-let fakePathArray = [];
-let currentIndex = 0;
-let randomNumber = null;
-let newIndex = null;
-let moveDirection = null;
-
 function createSuccessfulPath() {
 
   // Checking if there is a possible exit - whilst there isn't revert back to previous gridSquare
@@ -166,19 +136,8 @@ function createSuccessfulPath() {
   }
 }
 
-// Run createMaze function
-while (gridArray[currentIndex].classList.contains('finishing-square') === false) {
-  createSuccessfulPath();
-
-}
-
-
-
-
-
 
 //! 4) Deal with the boarder
-
 // Function to decide on which borders to remove when create paths.
 function borderRemovalDecision(direction, currentIndex, newIndex) {
   switch (direction) {
@@ -240,33 +199,9 @@ function addBoarderAtIntersect(currentIndex, previousIndex) {
 
 
 
-
-// ! Removing first lot of fake path
-// Removes fake-path class from all grid-square containing it, leaving just a successful path
-gridArray.forEach((item) => {
-  if (item.classList.contains('fake-path')) {
-    item.classList.remove('fake-path');
-    item.style.border = 'green 1px solid'
-  }
-})
-
-
-
-
-
-
-
 //! Intoduce fake path in all grid squares not currently used
+function createFakePath() {
 
-
-
-// Check for first grid cell without a class of succesful-path or fake-path
-
-let currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
-let fakePathArrayTwo = [];
-let array = [];
-
-while (currentEmptyCell != -1) {
 
   // Removes the left hand boarder of currentEmptyCell square and right hand border of adjacent square,
   // as long as it is not in the first column, in which case it removes the top and bottom borders
@@ -279,72 +214,53 @@ while (currentEmptyCell != -1) {
     removeBorderRight(currentEmptyCell - 1);
   }
 
-  // Addes the fake-path class to the currentEmptyCell index and adds the index to the fakePathTwo Array
+  // Addes the fake-path class to the currentEmptyCell index and adds the index to the fakePathTwo Array and fakePathBuilder array
   gridArray[currentEmptyCell].classList.add('fake-path');
   fakePathArrayTwo.push(currentEmptyCell);
-  array.push(currentEmptyCell);
+  fakePathBuilder.push(currentEmptyCell);
 
-  console.log("fakepatharraytwo: ", fakePathArrayTwo);
-  console.log("array: ", array)
 
-  while (array.length != 0) {
+
+  while (fakePathBuilder.length != 0) {
     let possibleExit = checkPossibleExit(currentEmptyCell);
-    console.log("Possible Exit: ", possibleExit);
 
     while (possibleExit === false) {
-      array.pop();
-      console.log("Array popped: ", array);
-      currentEmptyCell = array[array.length - 1];
-      console.log("Empty cell: ", currentEmptyCell);
-      if (array.length === 0) {
+      fakePathBuilder.pop();
+      currentEmptyCell = fakePathBuilder[fakePathBuilder.length - 1];
+      if (fakePathBuilder.length === 0) {
         possibleExit = true;
       }
       else {
         possibleExit = checkPossibleExit(currentEmptyCell)
       }
     }
-    if (array.length === 0) {
+    if (fakePathBuilder.length === 0) {
     }
     else {
-      createFakePath();
+      addToFakePath();
     }
   }
   currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
 }
 
-function createFakePath() {
+function addToFakePath() {
 
   generateRandomDirection(currentEmptyCell);
 
   if (checkIfWallPresent(moveDirection, currentEmptyCell) === false && checkIfSuccessfulPathClass(newIndex) === false && checkIfFakePathClass(newIndex) === false) {
     gridArray[newIndex].classList.add('fake-path');
     fakePathArrayTwo.push(newIndex);
-    array.push(newIndex);
+    fakePathBuilder.push(newIndex);
     borderRemovalDecision(moveDirection, currentEmptyCell, newIndex);
     currentEmptyCell = newIndex;
   }
   else {
-    createFakePath();
+    addToFakePath();
   }
 }
 
 
-
-
-
-
-
-
-
-
-
-
 //! Introduce "ball" into the game
-
-let currentPlayerIndex = 0;
-let newPlayerIndex = null;
-let playerMoves = 0;
-
 function addBall(index) {
   gridArray[index].classList.add('ball');
 }
@@ -356,9 +272,6 @@ function removeBall(index) {
 function addPlayerFollow(index) {
   gridArray[index].classList.add('player-follower');
 }
-
-
-document.addEventListener('keydown', handleKeyPress)
 
 function handleKeyPress(event) {
   console.log(event);
@@ -389,13 +302,13 @@ function handleKeyPress(event) {
     playerMoves++;
     console.log("Player moves: ", playerMoves);
     if (gridArray[currentPlayerIndex].classList.contains('finishing-square')) {
-      winnerBanner.style.visibility = 'visible'
+      winnerBanner.style.visibility = 'visible';
+      clearInterval(timer);
     }
   }
   else { };
 
 }
-
 
 function checkIfBoardersPresent(direction, currentPlayerIndex) {
   switch (direction) {
@@ -416,60 +329,43 @@ function checkIfBoardersPresent(direction, currentPlayerIndex) {
 }
 
 
-
-
-
-
 // ! Displaying maze
-removeMaze();
 function removeMaze() {
-for (let i = 0; i < gridSize; i++) {
-  gridArray[i].classList.add('starter-screen');
-}
+  for (let i = 0; i < gridSize; i++) {
+    gridArray[i].classList.add('starter-screen');
+  }
 }
 
 function addMaze() {
   for (let i = 0; i < gridSize; i++) {
     gridArray[i].classList.remove('starter-screen');
+    
   }
 }
 
-// let i = -1;
-// const increaseNumber = setInterval(() => {
-//   i = i + 1;
-// }, 20)
+function animatedShowMaze() {
+  let i = -1;
+  const increaseNumber = setInterval(() => {
+    i = i + 1;
+  }, 2000)
 
 
-// if (i < gridSize) {
-//   const displayMaze = setInterval(() => {
-//     gridArray[i].classList.remove('starter-screen');
-//     gridArray[i].style.border
-    
-//   }, 20)
-// }
-// else {
-//   clearInterval(increaseNumber);
-//   clearInterval(displayMaze);
-// }
-  
+  if (i < gridSize) {
+    const displayMaze = setInterval(() => {
+      gridArray[i].classList.remove('starter-screen');
+      gridArray[i].style.border
+
+    }, 2000)
+  }
+  else {
+    clearInterval(increaseNumber);
+    clearInterval(displayMaze);
+  }
+}
+
 
 
 // ! Managing press play button
-const openingBanner = document.querySelector('.start-menu-display');
-const playGameButton = document.querySelector('.play-game')
-const losingBanner = document.querySelector('.loser-display');
-const winnerBanner = document.querySelector('.winner-display');
-const playGameAgainButtons = document.querySelectorAll('.play-again')
-
-losingBanner.style.visibility = 'hidden';
-winnerBanner.style.visibility = 'hidden';
-
-
-
-playGameButton.addEventListener('click', managePlayGameButton);
-
-playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
-
 function managePlayGameButton(event) {
   console.log(event);
   openingBanner.style.visibility = 'hidden';
@@ -479,7 +375,6 @@ function managePlayGameButton(event) {
 
 function managePlayAgainButtons(event) {
   console.log("You pressed it")
-
 }
 
 
@@ -498,7 +393,6 @@ function managePlayAgainButtons(event) {
 
 
 // ! Adding timer to game
-
 function countDown() {
   const timerScreen = document.querySelector('.timer');
   let startingSeconds = 65;
@@ -506,7 +400,7 @@ function countDown() {
   timer = setInterval(() => {
     if (startingSeconds > 0) {
       startingSeconds--
-      let minutes = Math.floor(startingSeconds/60);
+      let minutes = Math.floor(startingSeconds / 60);
       let seconds = startingSeconds % 60;
       seconds = seconds < 10 ? '0' + seconds : seconds;
       minutes = minutes < 10 ? '0' + minutes : minutes;
@@ -518,3 +412,76 @@ function countDown() {
     }
   }, 1000)
 }
+
+
+
+//! ALL CODE FLOW
+
+
+
+console.log("Hello")
+const width = 5;
+const gridSize = width * width;
+console.log(gridSize);
+const gridArray = [];
+
+let successfulPathArray = [0];
+let fakePathArray = [];
+let currentIndex = 0;
+let newIndex = null;
+let randomNumber = null;
+let moveDirection = null;
+
+let currentEmptyCell = null;
+let fakePathArrayTwo = [];
+let fakePathBuilder = [];
+
+let currentPlayerIndex = 0;
+let newPlayerIndex = null;
+let playerMoves = 0;
+
+let timer = undefined;
+
+const gridWrapper = document.querySelector('.grid-wrapper');
+const openingBanner = document.querySelector('.start-menu-display');
+const playGameButton = document.querySelector('.play-game')
+const losingBanner = document.querySelector('.loser-display');
+const winnerBanner = document.querySelector('.winner-display');
+const playGameAgainButtons = document.querySelectorAll('.play-again')
+playGameButton.addEventListener('click', managePlayGameButton);
+playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
+document.addEventListener('keydown', handleKeyPress)
+
+
+losingBanner.style.visibility = 'hidden';
+winnerBanner.style.visibility = 'hidden';
+
+// 1 - Create the grid for the maze to be generated in
+createGrid();
+
+// 2 - Assign a start and finish to the maze at the first grid square and the last
+gridArray[0].classList.add('starting-square', 'successful-path');
+gridArray[gridArray.length - 1].classList.add('finishing-square');
+
+// 3 - Run createMaze function
+while (gridArray[currentIndex].classList.contains('finishing-square') === false) {
+  createSuccessfulPath();
+}
+
+// 4 - Removes fake-path class from all grid squares containing it, leaving just a successful path.
+// This is done to improve the genuineness of the fake path trails when they are created as one
+gridArray.forEach((item) => {
+  if (item.classList.contains('fake-path')) {
+    item.classList.remove('fake-path');
+    item.style.border = 'green 1px solid'
+  }
+})
+
+// 5 - Creates a fake path in all squares not taken up with a successful-path class
+// Check for first grid cell without a class of succesful-path or fake-path
+currentEmptyCell = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
+while (currentEmptyCell != -1) {
+  createFakePath();
+}
+
+removeMaze();
