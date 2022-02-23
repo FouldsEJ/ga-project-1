@@ -9,16 +9,28 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lato:ital@1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles/style.css">
+  <script src="https://kit.fontawesome.com/3c629f6b1b.js" crossorigin="anonymous"></script>
   <title>Document</title>
 </head>
 
 <body>
   <header>
-    <div class="instructions"></div>
+    <button class="instructions"></button>
     <h1 class="title">MAZE MADNESS</h1>
     <div class="settings"></div>
   </header>
 
+  <div class="side-bar">
+    <h2 class="side-bar-title">Maze Madness Games:</h2>
+    <h3><button class="play-side-bar-button">Play Maze Madness!</button></h3>
+    <h3>Maze in My Own Time</h3>
+    <ul class='maze-alone'>
+      <li><button value="easy">Easy</button></li>
+      <li><button value="medium">Medium</button></li>
+      <li><button value="hard">Hard</button></li>
+      <li><button value="crazy-hard">Crazy Hard</button></li>
+    </ul>
+  </div>
   <div class="game-body">
     <div class="timer-and-score-wrapper">
       <div class="timer">00:00</div>
@@ -38,10 +50,15 @@
     <div class="winner-display">
       <h2>Congratulations!! You completed level ....</h2>
       <p>Press play to play again:</p>
-      <button class="retry-level">Re-try Level</button>
-      <button class="next-level">Next Level</button>
+      <div class="winner-buttons">
+        <button class="retry-level">Re-try Level</button>
+        <button class="next-level">Next Level</button>
+      </div>
     </div>
   </div>
+<div class="show-answer">
+  <button>Show Quickest Route</button>
+</div>
   <script src="./scripts/app.js"></script>
 </body>
 

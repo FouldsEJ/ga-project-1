@@ -277,7 +277,6 @@ function addPlayerFollow(index) {
 function checkIfBoardersPresent(direction, currentPlayerIndex) {
   switch (direction) {
     case 'right':
-      console.log(gridArray[currentPlayerIndex].style.borderRight);
       return (gridArray[currentPlayerIndex].style.borderRight)
       break;
     case 'left':
@@ -377,6 +376,10 @@ function manageNextLevelButton(event) {
   countDown();
 }
 
+function manageInstructionsButton(event) {
+  sideBar.classList.toggle('side-bar-visible');
+}
+
 function handleKeyPress(event) {
   console.log(event);
   switch (event.which) {
@@ -404,9 +407,8 @@ function handleKeyPress(event) {
     addBall(newPlayerIndex);
     currentPlayerIndex = newPlayerIndex;
     playerMoves++;
-    score=score-10;
+    score = score - 10;
     displayScore()
-    console.log("Player moves: ", playerMoves);
     if (gridArray[currentPlayerIndex].classList.contains('finishing-square')) {
       displayAndFormatWinnerBanner();
     }
@@ -414,8 +416,64 @@ function handleKeyPress(event) {
       collectGoldCoins(currentPlayerIndex);
     }
   }
-  
 
+
+}
+
+function managePlayGameSideBarButton(event) {
+  sideBar.classList.toggle('side-bar-visible');
+  clearInterval(timer);
+  reset();
+  createGameBoard();
+  countDown();
+  openingBanner.style.visibility = 'hidden';
+  document.addEventListener('keydown', handleKeyPress);
+  displayScore();
+}
+
+function manageMazeInOwnTime(event) {
+  sideBar.classList.toggle('side-bar-visible');
+  openingBanner.style.visibility = 'hidden';
+  document.addEventListener('keydown', handleKeyPress);
+  clearInterval(timer);
+  const hardness = event.target.value;
+  reset();
+  switch (hardness) {
+    case 'easy':
+      width = 10;
+      break;
+    case 'medium':
+      width = 25;
+      break;
+    case 'hard':
+      width = 50;
+      break;
+    case 'crazy-hard':
+      width = 100;
+      break;
+  }
+  gameStyle = 'mazeAlone';
+  gridSize = width * width;
+  createGameBoard();
+  displayScore();
+  timerScreen.innerHTML = `00:00`;
+  showAnswerButton.style.visibility = 'visible';
+
+
+}
+
+function manageShowAnswerButton(event) {
+  const successfulPath = document.querySelectorAll('.successful-path');
+  if (event.type === 'mousedown') {
+    for (let i = 0; i < successfulPath.length; i++) {
+      successfulPath[i].style.backgroundColor = 'red';
+    }
+  }
+  else {
+    for (let i = 0; i < successfulPath.length; i++) {
+      successfulPath[i].style.backgroundColor = '#f6f7d4';
+    }
+  }
 }
 
 // ! Functions for formatting Winning Banner
@@ -423,17 +481,26 @@ function displayAndFormatWinnerBanner() {
   winnerBanner.style.visibility = 'visible';
   const winnerBannerH2 = document.querySelector('.winner-display h2');
   const winnerBannerP = document.querySelector('.winner-display p');
-  console.log(winnerBannerH2);
-  winnerBannerH2.innerText = `Congratulations!! You completed level ${level}`;
-  winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`
-  clearInterval(timer);
+  const winnerButtons = document.querySelector('.winner-buttons');
 
+  if (gameStyle === 'gamePlay') {
+    winnerBannerH2.innerText = `Congratulations!! You completed level ${level}`;
+    winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`;
+    clearInterval(timer);
+  }
+  else {
+    winnerBannerH2.innerText = `Congratulations!! You completed the maze`
+    winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`;
+    winnerButtons.innerHTML = '';
+    const btns = mazeInOwnTimeButtons.inner;
+    console.log(btns);
+    // winnerButtons.appendChild(btn);
+  }
 }
 
 
 // ! Function to add timer to the game
 function countDown() {
-  const timerScreen = document.querySelector('.timer');
   startingSeconds = levelTime;
   let minutes = Math.floor(startingSeconds / 60);
   let seconds = startingSeconds % 60;
@@ -461,7 +528,12 @@ function countDown() {
 
 function displayScore() {
   const scoreValue = document.querySelector('.score');
-  scoreValue.innerText = `Score: ${score}`;
+  if (gameStyle === 'gamePlay') {
+    scoreValue.innerText = `Score: ${score}`;
+  }
+  else {
+    scoreValue.innerText = `Score: 0`
+  }
 }
 
 
@@ -469,6 +541,7 @@ function displayScore() {
 let levelTime = 20;
 let level = 1;
 let score = 1000;
+let gameStyle = 'gamePlay';  // Option of gamePlay or mazeAlone
 
 let width = 4;
 let gridSize = width * width;
@@ -496,10 +569,24 @@ const winnerBanner = document.querySelector('.winner-display');
 const playGameAgainButtons = document.querySelectorAll('.play-again')
 const retryLevelButton = document.querySelector('.retry-level')
 const nextLevelButton = document.querySelector('.next-level');
+const instructionsButton = document.querySelector('.instructions')
+const sideBar = document.querySelector('.side-bar');
+const playMazeMadnessSideBarButton = document.querySelector('.play-side-bar-button')
+const mazeInOwnTimeButtons = document.querySelectorAll('.maze-alone')
+const showAnswer = document.querySelector('.show-answer');
+const timerScreen = document.querySelector('.timer');
+const showAnswerButton = document.querySelector('.show-answer');
+
 playGameButton.addEventListener('click', managePlayGameButton);
 playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
 retryLevelButton.addEventListener('click', manageRetryLevelButton);
 nextLevelButton.addEventListener('click', manageNextLevelButton);
+instructionsButton.addEventListener('click', manageInstructionsButton);
+playMazeMadnessSideBarButton.addEventListener('click', managePlayGameSideBarButton);
+mazeInOwnTimeButtons.forEach(btn => btn.addEventListener('click', manageMazeInOwnTime));
+showAnswer.addEventListener('mousedown', manageShowAnswerButton);
+showAnswer.addEventListener('mouseup', manageShowAnswerButton);
+
 
 // ! Function which creates the maze
 function createGameBoard() {
@@ -538,8 +625,9 @@ function createGameBoard() {
     currentIndex = gridArray.findIndex((item) => checkIfSuccessfulPathClass(item.id) === false && checkIfFakePathClass(item.id) === false);
   }
 
-  // 6 - Add goldenCoins
-  addGoldCoins();
+  if (gameStyle === 'gamePlay') {
+    addGoldCoins();
+  }
 
 }
 
@@ -548,6 +636,7 @@ function reset() {
   levelTime = 20;
   level = 1;
   score = 1000;
+  gameStyle = 'gamePlay';
   width = 5;
   gridSize = width * width;
   gridArray = [];
@@ -564,11 +653,13 @@ function reset() {
   timer = undefined;
 
   gridWrapper.innerHTML = "";
+  showAnswerButton.style.visibility = 'hidden';
 }
 
 
 
 createGameBoard();
+
 hideMaze();
 
 
@@ -599,12 +690,12 @@ function collectGoldCoins(currentPlayerIndex) {
 
 
 
-class Level {
-  constructor(width, time) {
-    this.width = width;
-    this.time = time;
-  }
-}
+// class Level {
+//   constructor(width, time) {
+//     this.width = width;
+//     this.time = time;
+//   }
+// }
 
 
-const levelOne = new Level(5, 20);
+// const levelOne = new Level(5, 20);
