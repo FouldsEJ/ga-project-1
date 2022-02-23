@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 body {
@@ -7,6 +8,21 @@ body {
   padding: 0;
   font-family: 'Lato', sans-serif;
   background-color: #d2f6c5;
+}
+
+button {
+  background-color: #99f3bd;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-weight: bold;
+  height: 45px;
+  width: 100px; 
+  margin: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #f6f7d4;
 }
 
 /* Header */
@@ -26,30 +42,22 @@ header {
 
 
 /* Side Bar */
-.side-bar{
-  height: 100vh;
-  border: none;
-  position: absolute;
-  width: 0px;
-  z-index: 1;
-  background-color: #28df99;
-  transition: width 2s;
-  text-align: center;
-  visibility: hidden;
-}
 
-.side-bar-visible{
-  width: 300px;
-  border-right: 2px solid black;
-  visibility: visible;
-}
 
 
 .menu {
   background-color: #d2f6c5;
   border: none;
   cursor: pointer;
-  padding: 0 0 0 20px;
+  transition: all 0.5s;
+  margin: 0 0 0 20px;
+  height: 47px;
+  width: 41px;
+}
+
+.menu:hover{
+    transform: rotate(90deg) translate(0px);
+    background-color: #d2f6c5;
 }
 
 .menu div {
@@ -58,6 +66,48 @@ header {
   background-color: black;
   margin: 6px 0;
 }
+
+.side-bar{
+  height: 100vh;
+  border: none;
+  position: absolute;
+  width: 0px;
+  z-index: 1;
+  background-color: #28df99;
+  transition: all 0.5s;
+  text-align: center;
+  box-shadow: 5px 5px 10px grey;
+}
+
+
+
+.side-bar-visible{
+  width: 300px;
+  border-right: 2px solid black;
+}
+
+.side-bar ul {
+  padding: 0;
+}
+
+.side-bar li, .side-bar h2, .side-bar h3 {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#side-bar-title {
+  padding: 20px 0 10px 0px;
+}
+
+#own-time-title {
+  padding: 50px 0 10px 0px;
+}
+
+
 
 .instructions {
   border: 3px solid black;
@@ -68,17 +118,6 @@ header {
   text-align: center;
   padding: 2px;
   border-radius: 50%;;
-}
-
-.side-bar ul {
-  padding: 0;
-}
-
-.side-bar li {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  text-align: center;
 }
 
 
@@ -141,8 +180,8 @@ header {
       linear-gradient(135deg, black 25%, transparent 25%),
       linear-gradient(45deg, transparent 75%, black 75%),
       linear-gradient(135deg, transparent 75%, black 75%);
-    background-size:25px 25px; /* Must be a square */
-    background-position:0 0, 12.5px 0, 12.5px -12.5px, 0px 12.5px
+    background-size:50% 50%; /* Must be a square */
+    background-position:0 0, 50% 0, 50% -50%, 0px 50%;
 }
 
 .fake-path {
@@ -159,12 +198,22 @@ header {
 }
 
 .gold-coin {
-  /* background-color: gold; */
   background-image: url(../images/us-dollar-coin-color.png);
   background-size: 50% auto;
   background-repeat: no-repeat;
   background-position: center;
+  /* animation: rotation 2s infinite linear; */
 }
+
+  /* @keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+} */
+
 
 .starter-screen {
   background-color: grey;
@@ -181,9 +230,14 @@ header {
   max-width: 500px;
   border-radius: 10px;
   position: absolute;
-  top: 35%;
-  left:33%;
+  top: 40%;
+  left:50%;
+  transform: translate(-50%, -50%);
   padding: 20px;
+}
+
+.show-successful-path {
+  background-color: red;
 }
 
 
@@ -225,3 +279,4 @@ header {
   top: 0;
   cursor: pointer;
 }
+
