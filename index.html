@@ -15,9 +15,13 @@
 
 <body>
   <header>
-    <button class="instructions"></button>
+    <button class="menu">
+      <div></div>
+      <div></div>
+      <div></div>
+    </button>
     <h1 class="title">MAZE MADNESS</h1>
-    <div class="settings"></div>
+    <div class="instructions">?</div>
   </header>
 
   <div class="side-bar">
@@ -55,10 +59,22 @@
         <button class="next-level">Next Level</button>
       </div>
     </div>
+    <div class="show-answer">
+      <button>Show Quickest Route</button>
+    </div>
   </div>
-<div class="show-answer">
-  <button>Show Quickest Route</button>
-</div>
+  <div class="overlay">
+    <div class="inner-overlay">
+      <h2>How to Play</h2>
+      <p> Move your square through the maze to the chequered flag using the arrow keys.</p>
+      <p>You start with 1000 points. For every move you make you lose 10 points. For every level you complete you gain 5000 points.</p>
+      <p>Be aware of the timer! If this runs out its game over. You start with 20 seconds. Any time you have left over from the previous level is carried forward to the next level.</p>
+      <p>Look out for gold coins! If you collect one of these you gain 10 extra seconds.</p>
+      <button class="close-instructions">X</button>
+    </div>
+    
+  </div>
+
   <script src="./scripts/app.js"></script>
 </body>
 

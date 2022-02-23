@@ -45,13 +45,29 @@ header {
 }
 
 
+.menu {
+  background-color: #d2f6c5;
+  border: none;
+  cursor: pointer;
+  padding: 0 0 0 20px;
+}
+
+.menu div {
+  width: 35px;
+  height: 5px;
+  background-color: black;
+  margin: 6px 0;
+}
+
 .instructions {
-  background-image: url("../images/hamburger.png");
-  background-position: center;
-  background-repeat: no-repeat; 
-  background-size: cover;
-  height: 20px;
-  width: 50px;
+  border: 3px solid black;
+  height: 30px;
+  width: 30px;
+  margin: 0 20px 0 0;
+  cursor: pointer;
+  text-align: center;
+  padding: 2px;
+  border-radius: 50%;;
 }
 
 .side-bar ul {
@@ -143,7 +159,11 @@ header {
 }
 
 .gold-coin {
-  background-color: gold;
+  /* background-color: gold; */
+  background-image: url(../images/us-dollar-coin-color.png);
+  background-size: 50% auto;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .starter-screen {
@@ -171,4 +191,37 @@ header {
   text-align: center;
   margin: 0 auto;
   visibility: hidden;
+}
+
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  background-color: #28df99;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  text-align: left;
+  visibility: hidden;
+}
+
+.inner-overlay {
+  margin: 0 30%;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  height: 100vh;
+  padding: 15px;
+  position: relative;
+}
+
+.inner-overlay h2{
+  text-align: center;
+}
+
+.close-instructions{
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
 }

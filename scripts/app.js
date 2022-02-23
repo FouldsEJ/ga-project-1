@@ -376,7 +376,7 @@ function manageNextLevelButton(event) {
   countDown();
 }
 
-function manageInstructionsButton(event) {
+function manageMenuButton(event) {
   sideBar.classList.toggle('side-bar-visible');
 }
 
@@ -476,6 +476,16 @@ function manageShowAnswerButton(event) {
   }
 }
 
+function manageInstructionsButton(event) {
+  const overlay = document.querySelector('.overlay');
+  overlay.style.visibility = 'visible';
+}
+
+function manageCloseInstructionsButton(event) {
+  const overlay = document.querySelector('.overlay');
+  overlay.style.visibility = 'hidden';
+}
+
 // ! Functions for formatting Winning Banner
 function displayAndFormatWinnerBanner() {
   winnerBanner.style.visibility = 'visible';
@@ -569,24 +579,27 @@ const winnerBanner = document.querySelector('.winner-display');
 const playGameAgainButtons = document.querySelectorAll('.play-again')
 const retryLevelButton = document.querySelector('.retry-level')
 const nextLevelButton = document.querySelector('.next-level');
-const instructionsButton = document.querySelector('.instructions')
+const menuButton = document.querySelector('.menu')
 const sideBar = document.querySelector('.side-bar');
 const playMazeMadnessSideBarButton = document.querySelector('.play-side-bar-button')
 const mazeInOwnTimeButtons = document.querySelectorAll('.maze-alone')
 const showAnswer = document.querySelector('.show-answer');
 const timerScreen = document.querySelector('.timer');
 const showAnswerButton = document.querySelector('.show-answer');
+const instructionsButton = document.querySelector('.instructions');
+const closeInstructionsButton = document.querySelector('.close-instructions')
 
 playGameButton.addEventListener('click', managePlayGameButton);
 playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
 retryLevelButton.addEventListener('click', manageRetryLevelButton);
 nextLevelButton.addEventListener('click', manageNextLevelButton);
-instructionsButton.addEventListener('click', manageInstructionsButton);
+menuButton.addEventListener('click', manageMenuButton);
 playMazeMadnessSideBarButton.addEventListener('click', managePlayGameSideBarButton);
 mazeInOwnTimeButtons.forEach(btn => btn.addEventListener('click', manageMazeInOwnTime));
 showAnswer.addEventListener('mousedown', manageShowAnswerButton);
 showAnswer.addEventListener('mouseup', manageShowAnswerButton);
-
+instructionsButton.addEventListener('click', manageInstructionsButton);
+closeInstructionsButton.addEventListener('click', manageCloseInstructionsButton);
 
 // ! Function which creates the maze
 function createGameBoard() {
