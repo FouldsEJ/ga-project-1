@@ -331,7 +331,7 @@ function animatedShowMaze() {
 // ! Functions for managing the user pressing buttons/clicking
 function managePlayGameButton(event) {
   openingBanner.style.visibility = 'hidden';
-  animatedShowMaze();
+  unhideMaze();
   document.addEventListener('keydown', handleKeyPress);
   displayScore();
   countDown();
@@ -408,6 +408,8 @@ function handleKeyPress(event) {
     playerMoves++;
     score = score - 10;
     displayScore()
+    audio.src="./sounds/move.mp3"
+    audio.play();
     if (gridArray[currentPlayerIndex].classList.contains('finishing-square')) {
       displayAndFormatWinnerBanner();
     }
@@ -415,8 +417,11 @@ function handleKeyPress(event) {
       collectGoldCoins(currentPlayerIndex);
     }
   }
-
-
+  else {
+    audio.src = "./sounds/wall.mp3"
+    audio.play();
+  }
+  
 }
 
 function managePlayGameSideBarButton(event) {
@@ -680,6 +685,7 @@ const timerScreen = document.querySelector('.timer');
 const showAnswerButton = document.querySelector('.show-answer');
 const instructionsButton = document.querySelector('.instructions');
 const closeInstructionsButton = document.querySelector('.close-instructions')
+const audio = document.querySelector('audio');
 
 playGameButton.addEventListener('click', managePlayGameButton);
 playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
