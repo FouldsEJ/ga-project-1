@@ -624,17 +624,18 @@ function displayAndFormatWinnerBanner() {
   const winnerBannerH2 = document.querySelector('.winner-display h2');
   const winnerBannerP = document.querySelector('.winner-display p');
   const winnerGameButtons = document.querySelector('.winner-game-buttons');
-  const winnerMazeAloneButtons = document.querySelector('.winner-maze-alone-buttons');
-
-  winnerBannerH2.innerText = `Congratulations!! You Completed The Maze`
-  winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`;
+  const winnerMazeAloneButtons = document.querySelector('.winner-maze-alone-buttons')
 
   if (gameStyle === 'gamePlay') {
+    winnerBannerH2.innerText = `Congratulations!! You Completed Level ${level}`;
+    winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`;
     winnerGameButtons.style.display = 'block';
     winnerMazeAloneButtons.style.display = 'none';
     clearInterval(timer);
   }
   else {
+    winnerBannerH2.innerText = `Congratulations!! You Completed The Maze`
+    winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`;
     winnerGameButtons.style.display = 'none';
     winnerMazeAloneButtons.style.display = 'block';
   }
