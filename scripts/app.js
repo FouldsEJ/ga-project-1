@@ -252,16 +252,16 @@ function removeBorderLeft(index) {
 // Adds a border for the unusual case of an intersect between fake-path and successful-path, missing a border
 function addBoarderAtIntersect(currentIndex, previousIndex) {
   if (currentIndex - previousIndex === width) {
-    gridArray[currentIndex].style.borderTop = 'black 1px solid'
+    gridArray[currentIndex].style.borderTop = '#0081a7 1px solid'
   }
   else if (currentIndex - previousIndex === -width) {
-    gridArray[currentIndex].style.borderBottom = 'black 1px solid'
+    gridArray[currentIndex].style.borderBottom = '#0081a7 1px solid'
   }
   else if (currentIndex - 1 === previousIndex) {
-    gridArray[currentIndex].style.borderLeft = 'black 1px solid'
+    gridArray[currentIndex].style.borderLeft = '#0081a7 1px solid'
   }
   else if (currentIndex + 1 === previousIndex) {
-    gridArray[currentIndex].style.borderRight = 'black 1px solid'
+    gridArray[currentIndex].style.borderRight = '#0081a7 1px solid'
 
   }
 }
@@ -624,18 +624,17 @@ function displayAndFormatWinnerBanner() {
   const winnerBannerH2 = document.querySelector('.winner-display h2');
   const winnerBannerP = document.querySelector('.winner-display p');
   const winnerGameButtons = document.querySelector('.winner-game-buttons');
-  const winnerMazeAloneButtons = document.querySelector('.winner-maze-alone-buttons')
+  const winnerMazeAloneButtons = document.querySelector('.winner-maze-alone-buttons');
+
+  winnerBannerH2.innerText = `Congratulations!! You Completed The Maze`
+  winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`;
 
   if (gameStyle === 'gamePlay') {
-    winnerBannerH2.innerText = `Congratulations!! You completed level ${level}`;
-    winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`;
     winnerGameButtons.style.display = 'block';
     winnerMazeAloneButtons.style.display = 'none';
     clearInterval(timer);
   }
   else {
-    winnerBannerH2.innerText = `Congratulations!! You completed the maze`
-    winnerBannerP.innerText = `You mangaged it in: ${playerMoves} moves\nThe minimum number of moves was: ${successfulPathArray.length - 1} moves`;
     winnerGameButtons.style.display = 'none';
     winnerMazeAloneButtons.style.display = 'block';
   }
@@ -650,7 +649,6 @@ function displayScore() {
     scoreValue.innerText = `Score: 0`
   }
 }
-
 
 // ! Functions for dealing with gold coins
 function addGoldCoins() {
@@ -719,7 +717,7 @@ function createGameBoard() {
   gridArray.forEach((item) => {
     if (item.classList.contains('fake-path')) {
       item.classList.remove('fake-path');
-      item.style.border = 'black 1px solid'
+      item.style.border = '#0081a7 1px solid'
       fakePathArray = [];
     }
   })

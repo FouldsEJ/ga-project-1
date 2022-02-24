@@ -7,23 +7,31 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Lato', sans-serif;
-  background-color: #d2f6c5;
+  background-color: #fdfcdc;
+  color: #fdfcdc;
 }
 
 button {
-  background-color: #99f3bd;
-  border: 2px solid black;
+  background-color: #fdfcdc;
+  border: 2px solid #0081a7;
   border-radius: 4px;
   font-weight: bold;
   height: 45px;
   width: 120px; 
   margin: 5px;
   cursor: pointer;
+  color: #0081a7;
+  font-family: 'Lato', sans-serif;
+
 }
 
 button:hover {
-  background-color: #f6f7d4;
+  background-color: #fed9b7;
   font-size: 1em;
+}
+
+h2, h3 {
+  font-style: italic;
 }
 
 /* Header */
@@ -34,11 +42,14 @@ header {
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid black;
+  background-color: #0081a7;
 }
 
 .title {
   text-align: center;
   margin: 0;
+  font-weight: bold;
+  /* font-style: italic; */
 }
 
 
@@ -47,7 +58,7 @@ header {
 
 
 .menu {
-  background-color: #d2f6c5;
+  background-color: #0081a7;
   border: none;
   cursor: pointer;
   transition: all 0.5s;
@@ -58,13 +69,13 @@ header {
 
 .menu:hover{
     transform: rotate(90deg) translate(0px);
-    background-color: #d2f6c5;
+    background-color: #0081a7;
 }
 
 .menu div {
   width: 35px;
   height: 5px;
-  background-color: black;
+  background-color: #fdfcdc;
   margin: 6px 0;
 }
 
@@ -74,7 +85,7 @@ header {
   position: absolute;
   width: 0px;
   z-index: 1;
-  background-color: #28df99;
+  background-color: #7FBFC2;
   transition: all 0.5s;
   text-align: center;
   box-shadow: 5px 5px 10px grey;
@@ -84,7 +95,7 @@ header {
 
 .side-bar-visible{
   width: 300px;
-  border-right: 2px solid black;
+  border-right: 2px solid #0081a7;
 }
 
 .side-bar ul {
@@ -117,7 +128,7 @@ header {
 
 
 .instructions {
-  border: 3px solid black;
+  border: 3px solid #fdfcdc;
   height: 30px;
   width: 30px;
   margin: 0 20px 0 0;
@@ -130,7 +141,7 @@ header {
 .sound {
   padding: 6px 0 0 0;
   border: none;
-  background-color: #d2f6c5;
+  background-color: #0081a7;
   margin: 0 0;
   width: 30px;
   height: 30px;
@@ -168,13 +179,14 @@ header {
   align-items: center;
   flex-wrap: wrap;
   max-width: 799px;
-  border: 2px solid black;
+  border: 2px solid #0081a7;
+  box-shadow: 5px 5px 10px grey;
 }
 
 
 .grid-wrapper div {
   width: 10%;
-  border: black 1px solid;
+  border: #0081a7 1px solid;
   height: 10%;
 }
 
@@ -187,7 +199,8 @@ header {
 
 .timer,
 .score {
-  border: 2px solid black;
+  background-color: #7fbfc2;
+  border: 2px solid #0081a7;
   width: 100px;
   text-align: center;
   border-radius: 5px;
@@ -195,12 +208,12 @@ header {
 
 
 .successful-path {
-  background-color: #f6f7d4;
+  background-color: #fed9b7;
 }
 
 
 .starting-square {
-  background-color: #28df99;
+  background-color: #f07167;
 }
 
 .finishing-square {
@@ -214,16 +227,16 @@ header {
 }
 
 .fake-path {
-  background-color: #f6f7d4;
+  background-color: #fed9b7;
 }
 
 .player-follower {
-  background-color: #99f3bd;
+  background-color: #f7a58f;
 }
 
 
 .ball {
-  background-color: #28df99;
+  background-color: #f07167;
 }
 
 .gold-coin {
@@ -245,7 +258,7 @@ header {
 
 
 .starter-screen {
-  background-color: grey;
+  background-color: #f7a58f;
   background-image: none;
   border: none !important;
 }
@@ -253,8 +266,8 @@ header {
 .start-menu-display, 
 .loser-display,
 .winner-display {
-  background-color: #28df99;
-  border: 2px solid black;
+  background-color: #7FBFC2;
+  border: 2px solid #0081a7;
   text-align: center;
   max-width: 500px;
   border-radius: 10px;
@@ -267,7 +280,7 @@ header {
 
 
 .show-successful-path {
-  background-color: rgb(252, 129, 150);
+  background-color: #00afb9;
 }
 
 
@@ -278,10 +291,13 @@ header {
 }
 
 
+
+/* Instrcutions Overlay */
+
 .overlay {
   height: 100%;
   width: 100%;
-  background-color: #28df99;
+  background-color: #0081a7;
   position: absolute;
   z-index: 1;
   top: 0;
@@ -297,17 +313,24 @@ header {
   height: 100vh;
   padding: 15px;
   position: relative;
-  background-color: #f6f7d4;
+  background-color: #7fbfc2;
 }
 
 .inner-overlay h2{
   text-align: center;
+  font-weight: bold;
 }
 
 .inner-overlay h3{
   margin: 0 0 -10px 0;;
   padding: 0;
   font-weight: bold;
+}
+
+
+
+.inner-overlay ul li {
+  margin: 16px 0;
 }
 
 .close-instructions{
