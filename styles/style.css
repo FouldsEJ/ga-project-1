@@ -108,6 +108,12 @@ header {
   padding: 50px 0 10px 0px;
 }
 
+.header-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90px;
+}
 
 
 .instructions {
@@ -118,8 +124,30 @@ header {
   cursor: pointer;
   text-align: center;
   padding: 2px;
-  border-radius: 50%;;
+  border-radius: 50%;
 }
+
+.sound {
+  padding: 6px 0 0 0;
+  border: none;
+  background-color: #d2f6c5;
+  margin: 0 0;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.sound:hover {
+  font-size: 20px;
+}
+
+.instructions:hover {
+  height: 35px;
+  width: 35px;
+  font-size: 20px;
+
+}
+
 
 
 

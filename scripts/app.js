@@ -492,6 +492,18 @@ function manageCloseInstructionsButton(event) {
   overlay.style.visibility = 'hidden';
 }
 
+function manageSoundButton(event) {
+  if (audio.muted === false) {
+    audio.muted = true;
+  }
+  else {
+    audio.muted = false;
+  }
+  soundButton.classList.toggle('fa-volume-up');
+  soundButton.classList.toggle('fa-volume-mute')
+  
+}
+
 
 
 // ! Function to add timer to the game
@@ -686,6 +698,7 @@ const showAnswerButton = document.querySelector('.show-answer');
 const instructionsButton = document.querySelector('.instructions');
 const closeInstructionsButton = document.querySelector('.close-instructions')
 const audio = document.querySelector('audio');
+const soundButton = document.querySelector('i');
 
 playGameButton.addEventListener('click', managePlayGameButton);
 playGameAgainButtons.forEach(btn => btn.addEventListener('click', managePlayAgainButtons));
@@ -698,7 +711,9 @@ showAnswer.addEventListener('mousedown', manageShowAnswerButton);
 showAnswer.addEventListener('mouseup', manageShowAnswerButton);
 instructionsButton.addEventListener('click', manageInstructionsButton);
 closeInstructionsButton.addEventListener('click', manageCloseInstructionsButton);
+soundButton.addEventListener('click', manageSoundButton);
 
+audio.muted = false;
 
 
 
