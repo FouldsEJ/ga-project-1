@@ -31,11 +31,11 @@
     <h2 id="side-bar-title">Maze Madness Game:</h2>
     <button class="play-side-bar-button">Play Maze Madness!</button>
     <h2 id="own-time-title">Maze in Your Own Time:</h2>
-    <ul class='maze-alone'>
-      <li><button value="easy">Easy</button></li>
-      <li><button value="medium">Medium</button></li>
-      <li><button value="hard">Hard</button></li>
-      <li><button value="crazy-hard">Crazy Hard</button></li>
+    <ul>
+      <li><button class='maze-alone' value="easy">Easy</button></li>
+      <li><button class='maze-alone' value="medium">Medium</button></li>
+      <li><button class='maze-alone' value="hard">Hard</button></li>
+      <li><button class='maze-alone' value="crazy-hard">Crazy Hard</button></li>
     </ul>
   </div>
   <div class="game-body">
@@ -58,9 +58,15 @@
     <div class="winner-display">
       <h2>Congratulations!! You completed level ....</h2>
       <p>Press play to play again:</p>
-      <div class="winner-buttons">
+      <div class="winner-game-buttons">
         <button class="retry-level">Re-try Level</button>
         <button class="next-level">Next Level</button>
+      </div>
+      <div class="winner-maze-alone-buttons">
+        <button class='maze-alone' value="easy">Easy</button>
+        <button class='maze-alone' value="medium">Medium</button>
+        <button class='maze-alone' value="hard">Hard</button>
+        <button class='maze-alone' value="crazy-hard">Crazy Hard</button>
       </div>
     </div>
     <div class="show-answer">
@@ -70,12 +76,17 @@
   <div class="overlay">
     <div class="inner-overlay">
       <h2>How to Play</h2>
+      <h3>Play Maze Madness:</h3>
       <p> Move your square through the maze to the chequered flag using the arrow keys.</p>
       <p>You start with 1000 points. For every move you make you lose 10 points. For every level you complete you gain
         5000 points.</p>
       <p>Be aware of the timer! If this runs out its game over. You start with 20 seconds. Any time you have left over
         from the previous level is carried forward to the next level.</p>
       <p>Look out for gold coins! If you collect one of these you gain 10 extra seconds.</p>
+      <hr>
+      <h3>Maze in Your Own Time:</h3>
+      <p>No timer, no score, no pressure! Just enjoy mazing</p>
+      <p>(Look out for the "Show Route" button for a helping hint)</p>
       <button class="close-instructions">X</button>
     </div>
   </div>
