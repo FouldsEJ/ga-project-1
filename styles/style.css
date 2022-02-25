@@ -41,7 +41,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid #7FBFC2;
   background-color: #0081a7;
 }
 
@@ -54,8 +54,6 @@ header {
 
 
 /* Side Bar */
-
-
 
 .menu {
   background-color: #0081a7;
