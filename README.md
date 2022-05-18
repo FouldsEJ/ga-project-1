@@ -23,8 +23,7 @@ Maze Madness is a random, self-generating maze game, requiring a player to guide
 
 The first step of the project was planning how I wanted the game work and how it was to be played. The course of the first day was entirely spent developing a mind-map and pseudocode for the game. I initially listed out the steps required for the game to be played at a very high level and then broke these down into separate sections and pseudocoded them in far more detail (particularly the generation of the maze).
 
-![High level game logic image]
-(images/readme-image/high-level-game-play.png)
+![High level game logic image](images/readme-image/high-level-game-play.png)
 
 ### **2) Functionality**
 
@@ -32,8 +31,7 @@ The first step of the project was planning how I wanted the game work and how it
 
 A simple for loop initialised the playing grid, looping from 0 through to the specified size of the grid. Each grid square was created as a div and assigned an id number relating to its position in the grid.
 
-![Grid creation]
-(images/readme-image/grid-creation.png)
+![Grid creation](images/readme-image/grid-creation.png)
 
 ### Initialise the start and finish of the maze
 
@@ -58,11 +56,8 @@ On the occasion where the current grid square had no possible exit (i.e. all fou
 
 On the completion of the successful path, the same logic was used to create the fake paths. However, the difference this time was that the starting position for the first fake path was the first grid-square without a class of 'successful-path' or 'fake-path'. The code was then run, until all the grid squares in that section of the maze had no possible exits. The next empty grid square was then found and the same code ran until no further possible exits and then the next empty grid square was found and so on. (The image below helps to describe this. The red line being the successful path and the orange lines being the generated fake paths). These code runs were implemented with while loops.
 
-![Fake Path Generation image]
-(images/readme-image/fake-path-generation.png)
-
-![First basic maze grid]
-(images/readme-image/initial-maze-logic.png)
+![Fake Path Generation image](images/readme-image/fake-path-generation.png)
+![First basic maze grid](images/readme-image/initial-maze-logic.png)
 
 ### Border Generation
 
@@ -123,6 +118,6 @@ I was delighted with the way the project went. It was a great opportunity to put
 
 ## Contact:
 
-Github: github.com/FouldsEJ
-Linkedin: linkedin.com/in/edwardfoulds
-Portfolio: edwardfoulds.co.uk
+- Github: github.com/FouldsEJ
+- Linkedin: linkedin.com/in/edwardfoulds
+- Portfolio: edwardfoulds.co.uk
